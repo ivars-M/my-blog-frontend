@@ -18,22 +18,19 @@ export const CommentsBlock = ({
   currentUserId,
   onDelete,
 }) => {
-  // 🔥 Rādīt vairāk / mazāk state
   const [showAll, setShowAll] = React.useState(false);
 
-  // 🔥 Sakārtojam komentārus (jaunākie augšā)
   const sortedComments = [...items].sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
   );
 
-  // 🔥 Rādām tikai 10, ja showAll = false
   const visibleComments = showAll
     ? sortedComments
     : sortedComments.slice(0, 10);
 
   return (
     <SideBlock title="Komentāri">
-      <List>
+      <List sx={{ padding: 0 }}>
         {(isLoading ? [...Array(5)] : visibleComments).map((obj, index) => {
           const safeUser =
             obj?.user &&
@@ -54,13 +51,13 @@ export const CommentsBlock = ({
           return (
             <React.Fragment key={index}>
               {isLoading ? (
-                <ListItem alignItems="flex-start">
-                  <ListItemAvatar>
-                    <Skeleton variant="circular" width={40} height={40} />
+                <ListItem alignItems="flex-start" sx={{ padding: '8px 10px' }}>
+                  <ListItemAvatar sx={{ minWidth: 45 }}>
+                    <Skeleton variant="circular" width={30} height={30} />
                   </ListItemAvatar>
                   <div style={{ display: "flex", flexDirection: "column" }}>
-                    <Skeleton variant="text" height={25} width={120} />
-                    <Skeleton variant="text" height={18} width={230} />
+                    <Skeleton variant="text" height={20} width={100} />
+                    <Skeleton variant="text" height={15} width={180} />
                   </div>
                 </ListItem>
               ) : (
@@ -68,14 +65,38 @@ export const CommentsBlock = ({
                   to={`/posts/${obj.post?._id || obj.post}#comment-${obj._id}`}
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
-                  <ListItem alignItems="flex-start" button>
-                    <ListItemAvatar>
-                      <Avatar alt={safeUser.fullName} src={safeAvatar} />
+                  <ListItem 
+                    alignItems="flex-start" 
+                    button
+                    sx={{ 
+                      padding: '8px 10px', // Kompaktākas atkāpes
+                    }}
+                  >
+                    <ListItemAvatar sx={{ minWidth: 40 }}>
+                      <Avatar 
+                        alt={safeUser.fullName} 
+                        src={safeAvatar} 
+                        sx={{ width: 30, height: 30 }} // Mazāks avatars
+                      />
                     </ListItemAvatar>
 
                     <ListItemText
                       primary={safeUser.fullName}
                       secondary={obj.text}
+                      primaryTypographyProps={{ 
+                        style: { fontSize: '14px', fontWeight: 600, lineHeight: '1.2' } 
+                      }}
+                      secondaryTypographyProps={{ 
+                        style: { 
+                          fontSize: '13px', 
+                          color: '#444', 
+                          lineHeight: '1.3',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2, // Neļauj vienam komentāram aizņemt visu ekrānu
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden'
+                        } 
+                      }}
                     />
 
                     {safeUser._id === currentUserId && (
@@ -86,10 +107,14 @@ export const CommentsBlock = ({
                         }}
                         style={{
                           marginLeft: 10,
-                          background: "transparent",
+                          background: "#ffebee",
                           border: "none",
-                          color: "red",
+                          color: "#d32f2f",
                           cursor: "pointer",
+                          fontSize: '11px',
+                          padding: '2px 6px',
+                          borderRadius: '4px',
+                          fontWeight: 'bold'
                         }}
                       >
                         Dzēst
@@ -98,27 +123,29 @@ export const CommentsBlock = ({
                   </ListItem>
                 </Link>
               )}
-
-              <Divider variant="inset" component="li" />
+              <Divider variant="inset" component="li" sx={{ marginLeft: '50px' }} />
             </React.Fragment>
           );
         })}
       </List>
 
-      {/* 🔥 Rādīt vairāk / mazāk poga */}
       {sortedComments.length > 10 && (
         <button
           onClick={() => setShowAll(!showAll)}
           style={{
-            marginTop: 10,
-            padding: "8px 16px",
-            background: "#1976d2",
-            color: "white",
-            border: "none",
+            margin: "10px auto",
+            display: "block",
+            padding: "6px 12px",
+            background: "transparent",
+            color: "#1976d2",
+            border: "1px solid #1976d2",
+            borderRadius: "4px",
             cursor: "pointer",
+            fontSize: "13px",
+            fontWeight: "500"
           }}
         >
-          {showAll ? "Rādīt mazāk" : "Rādīt vairāk"}
+          {showAll ? "Rādīt mazāk" : `Rādīt vēl ${sortedComments.length - 10}`}
         </button>
       )}
 
@@ -126,3 +153,5 @@ export const CommentsBlock = ({
     </SideBlock>
   );
 };
+
+
