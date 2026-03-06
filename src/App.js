@@ -29,7 +29,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/profile/edit" element={<ProfileEdit />} />
           <Route path="/register" element={<Registration />} />
-          <Route path="/tag/:tag" element={<TagPage />} />
+          <Route path="/tags/:tag" element={<TagPage />} />
         </Routes>
       </Container>
     </>
