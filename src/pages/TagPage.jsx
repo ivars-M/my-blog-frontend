@@ -49,19 +49,65 @@ export const TagPage = () => {
   }, [dispatch]);
 
   return (
-    <>
+//     <>
+//       <Tabs
+//         style={{ marginBottom: 15 }}
+//         value={tabIndex}
+//         onChange={(_, newIndex) => setTabIndex(newIndex)} // ← mainām tab
+//         aria-label="basic tabs example"
+//       >
+//         <Tab label="Jauns" />
+//         <Tab label="Populārs" />
+//       </Tabs>
+//       <h2>Posti ar tagu: #{tag}</h2>
+//       <Grid container spacing={4}>
+//         <Grid xs={8} item>
+//           {filteredPosts.map((obj, index) => (
+//             <Post
+//               key={index}
+//               id={obj._id}
+//               title={obj.title}
+//               imageUrl={obj.imageUrl}
+//               isFullPost={false}
+//               user={obj.user}
+//               createdAt={obj.createdAt}
+//               viewsCount={obj.viewsCount}
+//               commentsCount={obj.commentsCount}
+//               tags={obj.tags}
+//             />
+//           ))}
+//         </Grid>
+//         <Grid xs={4} item>
+//           <TagsBlock items={tags.items} isLoading={isTagsLoading} />
+
+//           <CommentsBlock
+//             items={latestComments}
+//             isLoading={false}
+//             currentUserId={null}
+//             onDelete={() => {}}
+//           />
+//         </Grid>
+//       </Grid>
+//     </>
+//   );
+// };
+<>
       <Tabs
         style={{ marginBottom: 15 }}
         value={tabIndex}
-        onChange={(_, newIndex) => setTabIndex(newIndex)} // ← mainām tab
+        onChange={(_, newIndex) => setTabIndex(newIndex)}
         aria-label="basic tabs example"
       >
         <Tab label="Jauns" />
         <Tab label="Populārs" />
       </Tabs>
       <h2>Posti ar tagu: #{tag}</h2>
-      <Grid container spacing={4}>
-        <Grid xs={8} item>
+      
+      {/* Pievienojam spacing pielāgojumu: mazāks uz telefona (2), lielāks uz datora (4) */}
+      <Grid container spacing={{ xs: 2, md: 4 }}>
+        
+        {/* Rakstu sadaļa: xs={12} nozīmē, ka telefonā raksti būs pa visu platumu */}
+        <Grid item xs={12} md={8}>
           {filteredPosts.map((obj, index) => (
             <Post
               key={index}
@@ -77,9 +123,10 @@ export const TagPage = () => {
             />
           ))}
         </Grid>
-        <Grid xs={4} item>
-          <TagsBlock items={tags.items} isLoading={isTagsLoading} />
 
+        {/* Sānu josla: xs={12} nozīmē, ka telefonā tā noslīdēs zem rakstiem un būs pa visu platumu */}
+        <Grid item xs={12} md={4}>
+          <TagsBlock items={tags.items} isLoading={isTagsLoading} />
           <CommentsBlock
             items={latestComments}
             isLoading={false}
@@ -91,3 +138,5 @@ export const TagPage = () => {
     </>
   );
 };
+
+
