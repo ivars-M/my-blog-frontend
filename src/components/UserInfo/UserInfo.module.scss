@@ -1,6 +1,11 @@
 .root {
   display: flex;
   align-items: center;
+
+  /* PAPILDINĀTS: Nodrošinām atstarpi no elementiem, kas sekos zemāk (piem. virsraksta) */
+  @media (max-width: 600px) {
+    margin-bottom: 8px;
+  }
 }
 
 .avatar {
@@ -8,11 +13,17 @@
   height: 30px;
   border-radius: 30px;
   margin-right: 10px;
+  object-fit: cover; // Nodrošina, ka bilde netiek saspiesta
 }
 
 .userName {
   font-weight: 500;
   font-size: 14px;
+  line-height: 1.2; // Uzlabo lasāmību
+
+  @media (max-width: 600px) {
+    font-size: 13px; // Nedaudz mazāks fonts telefonam
+  }
 }
 
 .userDetails {
@@ -23,4 +34,8 @@
 .additional {
   font-size: 12px;
   opacity: 0.6;
+
+  @media (max-width: 600px) {
+    font-size: 11px; // Samazinām datuma fontu, lai nepārslogotu skatu
+  }
 }

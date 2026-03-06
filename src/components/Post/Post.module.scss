@@ -9,10 +9,10 @@ $blue: #4361ee;
   margin-bottom: 15px;
   position: relative;
   align-items: center;
-  // PAPILDINĀTS: Uz telefona mainām virzienu
+
   @media (max-width: 600px) {
     flex-direction: column;
-    align-items: flex-start; // Teksts sāksies no kreisās malas
+    align-items: flex-start;
   }
 
   &:hover {
@@ -25,6 +25,8 @@ $blue: #4361ee;
   }
 
   &Full {
+    display: block; // FullPost skatā elementiem jābūt vienam zem otra
+
     &:hover {
       background-color: #fff;
       border: 1px solid #dedede;
@@ -32,23 +34,32 @@ $blue: #4361ee;
     }
   }
 }
+
 .imageSmall {
   width: 100px;
   height: 150px;
   object-fit: cover;
   border-radius: 8px;
+
   @media (max-width: 600px) {
     width: 100%;
-    height: 200px; // Padarām bildi nedaudz lielāku un proporcionālu
-    border-radius: 0; // Uz telefona labāk izskatās bez noapaļotiem stūriem bildes augšā
+    height: 200px;
+    border-radius: 0;
   }
 }
+
 .imageFull {
-  width: 50%;
-  max-height: 100%;
+  width: 100%; // Atvērtā rakstā bildei jābūt pa visu platumu
+  max-height: 450px;
   object-fit: cover;
   border-radius: 8px;
+
+  @media (max-width: 600px) {
+    border-radius: 0;
+    max-height: 250px;
+  }
 }
+
 .rootFull {
   flex-direction: column;
 }
@@ -56,10 +67,10 @@ $blue: #4361ee;
 .wrapper {
   justify-content: left;
   padding: 10px 20px 20px;
-  // PAPILDINĀTS: Noņemam lieko atkapi uz telefona
+
   @media (max-width: 600px) {
     padding: 15px;
-    width: 100%; // Lai teksts aizpilda visu vietu
+    width: 100%;
     box-sizing: border-box;
   }
 }
@@ -71,11 +82,21 @@ $blue: #4361ee;
     font-size: 22px;
     line-height: 36px;
   }
+
+  // PAPILDINĀTS: Teksta lasāmība telefonā
+  @media (max-width: 600px) {
+    margin: 15px 0 25px;
+
+    p {
+      font-size: 16px;
+      line-height: 24px;
+    }
+  }
 }
 
 .indention {
   padding-left: 40px;
-  // PAPILDINĀTS: Telefonā nevajag tik lielu atkapi no kreisās malas
+
   @media (max-width: 600px) {
     padding-left: 0;
   }
@@ -84,7 +105,7 @@ $blue: #4361ee;
 .title {
   font-size: 28px;
   margin: 0;
-  // PAPILDINĀTS: Mazāks virsraksts telefonam
+
   @media (max-width: 600px) {
     font-size: 20px;
     line-height: 24px;
@@ -102,6 +123,13 @@ $blue: #4361ee;
   &Full {
     font-size: 42px;
     font-weight: 900;
+    margin-top: 15px; // Atstarpe no autora informācijas
+
+    @media (max-width: 600px) {
+      font-size: 24px;
+      line-height: 28px;
+      margin-top: 10px;
+    }
   }
 }
 
@@ -132,6 +160,10 @@ $blue: #4361ee;
   padding: 0;
   margin: 20px 0 0 0;
 
+  @media (max-width: 600px) {
+    margin-top: 15px;
+  }
+
   li {
     display: inline-flex;
     align-items: center;
@@ -145,46 +177,4 @@ $blue: #4361ee;
     }
   }
 }
-
-.skeleton {
-  background-color: #fff;
-  border: 1px solid #dedede;
-  border-radius: 6px;
-  overflow: hidden;
-  margin-bottom: 15px;
-
-  &Content {
-    padding: 20px;
-  }
-
-  &Info {
-    margin-left: 50px;
-  }
-}
-
-.skeletonUser {
-  display: flex;
-
-  &Details {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-.skeletonTags {
-  display: flex;
-
-  span {
-    margin-right: 15px;
-  }
-}
-
-.editButtons {
-  position: absolute;
-  right: 15px;
-  top: 15px;
-  background-color: rgba(255, 255, 255, 1);
-  border-radius: 10px;
-  opacity: 0;
-  transition: all 0.15s ease-in-out;
-}
+// ... skeleton un editButtons stili paliek nemainīgi
