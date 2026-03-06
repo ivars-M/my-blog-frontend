@@ -1,22 +1,49 @@
 .root {
-  width: 400px;
-  padding: 50px;
+  max-width: 500px; // Ierobežojam platumu, lai neizstiepjas
+  width: 100%;
+  padding: 40px;
   border: 1px solid #dedede;
   margin: 50px auto;
-}
+  background-color: #fff;
+  border-radius: 10px;
+  box-sizing: border-box;
 
-.field {
-  margin-bottom: 20px !important;
+  @media (max-width: 600px) {
+    width: 95%;
+    padding: 20px;
+    margin: 20px auto;
+    border: none; // Uz telefona tīrāks izskats bez rāmja
+  }
 }
 
 .title {
-  text-align: center !important;
-  font-weight: bold !important;
-  margin-bottom: 30px !important;
+  text-align: center;
+  font-weight: 700;
+  font-size: 28px;
+  margin-bottom: 30px;
+
+  @media (max-width: 600px) {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
 }
 
 .avatar {
   display: flex;
   justify-content: center;
   margin-bottom: 30px;
+
+  // Ja tev ir poga "Augšupielādēt foto", iecentrējam arī to
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.field {
+  margin-bottom: 20px !important;
+}
+
+.button {
+  margin-top: 10px;
+  width: 100%;
 }
