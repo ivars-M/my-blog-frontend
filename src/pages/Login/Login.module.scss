@@ -1,16 +1,35 @@
 .root {
-  width: 400px;
+  max-width: 400px; // Mainām no 'width' uz 'max-width'
+  width: 100%; // Ļauj aizpildīt pieejamo vietu
   padding: 50px;
   border: 1px solid #dedede;
   margin: 50px auto;
+  box-sizing: border-box; // Svarīgi, lai padding neizpleš formu platāku
+
+  /* Telefona versija */
+  @media (max-width: 600px) {
+    width: 95%; // Atstājam nelielas maliņas līdz ekrānam
+    padding: 30px 20px;
+    margin: 20px auto;
+    border: 1px solid #eee; // Var atstāt gaišāku rāmīti vai noņemt vispār
+  }
 }
 
 .field {
   margin-bottom: 20px !important;
+
+  /* Lai ievades lauki vienmēr būtu pa visu platumu */
+  width: 100%;
 }
 
 .title {
   text-align: center !important;
   font-weight: bold !important;
   margin-bottom: 30px !important;
+  font-size: 28px;
+
+  @media (max-width: 600px) {
+    font-size: 22px; // Nedaudz mazāks virsraksts uz telefona
+    margin-bottom: 20px !important;
+  }
 }

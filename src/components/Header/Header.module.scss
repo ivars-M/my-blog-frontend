@@ -1,69 +1,28 @@
-// .root {
-//   background-color: #fff;
-//   padding: 10px 0;
-//   border-bottom: 1px solid #e0e0e0;
-//   margin-bottom: 30px;
-// }
-
-// .inner {
-//   display: flex;
-//   justify-content: space-between;
-// }
-
-// .logo {
-//   display: flex;
-//   background-color: black;
-//   color: #fff;
-//   font-weight: 700;
-//   line-height: 35px;
-//   text-transform: uppercase;
-//   letter-spacing: 0.15px;
-//   border-radius: 5px;
-//   padding: 0 10px;
-//   text-decoration: none;
-//   justify-content: center;
-
-//   &:hover {
-//     background-color: #4361ee;
-//   }
-// }
-// .avatarWrapper {
-//   width: 40px;
-//   height: 40px;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   margin-right: 15px;
-// }
-
-// .buttons {
-//   button {
-//     margin-left: 10px;
-//   }
-
-//   a {
-//     text-decoration: none;
-//   }
-// }
 .root {
   background-color: #fff;
   padding: 10px 0;
   border-bottom: 1px solid #e0e0e0;
   margin-bottom: 30px;
+  position: sticky; // Ieteikums: Headeris paliks ekrāna augšā skrollējot
+  top: 0;
+  z-index: 1000;
+
+  @media (max-width: 600px) {
+    margin-bottom: 15px; // Mazāka atstarpe telefonā
+  }
 }
 
 .inner {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: wrap; // Ļauj elementiem pārlēkt rindā, ja par šauru
 
-  /* PAPILDINĀTS: Telefona skatam */
   @media (max-width: 600px) {
     flex-direction: column;
     justify-content: center;
-    gap: 15px;
-    text-align: center;
+    gap: 12px; // Atstarpe starp logo un pogu bloku
+    padding: 5px 0;
   }
 }
 
@@ -76,48 +35,61 @@
   text-transform: uppercase;
   letter-spacing: 0.15px;
   border-radius: 5px;
-  padding: 0 10px;
+  padding: 0 12px;
   text-decoration: none;
-  justify-content: center;
+  transition: background-color 0.2s ease-in-out;
 
   &:hover {
     background-color: #4361ee;
   }
 
-  /* PAPILDINĀTS: Lai logo nebūtu par milzīgu */
   @media (max-width: 600px) {
     font-size: 14px;
     line-height: 30px;
+    padding: 0 10px;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+
+  button,
+  a {
+    margin-left: 10px;
+    text-decoration: none;
+  }
+
+  @media (max-width: 600px) {
+    width: 100%;
+    justify-content: center;
+    margin-top: 5px;
+
+    button,
+    a {
+      margin: 0 4px !important; // Vienādas atstarpes abās pusēs
+      font-size: 12px; // Nedaudz mazāks teksts pogās
+      padding: 5px 8px;
+    }
   }
 }
 
 .avatarWrapper {
-  width: 40px;
-  height: 40px;
+  width: 35px; // Nedaudz mazāks telefonam draudzīgs izmērs
+  height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 15px;
-}
+  margin-right: 10px;
 
-.buttons {
-  /* PAPILDINĀTS: Sakārtojam pogas centrā uz telefona */
-  @media (max-width: 600px) {
-    display: flex;
-    justify-content: center;
+  img {
     width: 100%;
-
-    button {
-      margin: 0 5px !important; // Izlīdzinām atstarpes
-      padding: 5px 10px; // Padarām pogas nedaudz kompaktākas
-    }
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
   }
 
-  button {
-    margin-left: 10px;
-  }
-
-  a {
-    text-decoration: none;
+  @media (max-width: 600px) {
+    margin-right: 5px;
   }
 }

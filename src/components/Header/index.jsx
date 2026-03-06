@@ -53,14 +53,12 @@ export const Header = () => {
                 <Skeleton variant="circular" width={40} height={40} />
               )}
             </div>
-
             <div className={styles.buttons}>
               {isAuth ? (
                 <>
                   <Link to="/add-post">
-                    <Button variant="contained">Izveidot rakstu</Button>
+                    <Button variant="contained">Rakstīt postu</Button>
                   </Link>
-
                   <Button
                     onClick={onClickLogout}
                     variant="contained"
@@ -71,10 +69,10 @@ export const Header = () => {
                 </>
               ) : (
                 <>
-                  <Link to="/login">
+                  <Link to="/login" className={styles.loginBtn}>
                     <Button variant="outlined">Ieeja</Button>
                   </Link>
-                  <Link to="/register">
+                  <Link to="/register" className={styles.registerBtn}>
                     <Button variant="contained">Izveidot profilu</Button>
                   </Link>
                 </>
