@@ -52,7 +52,8 @@ export const Home = () => {
       </Tabs>
 
       <Grid container spacing={4}>
-        <Grid xs={8} item>
+        <Grid item xs={12} md={8}>
+        {/* <Grid xs={8} item> */}
           {(isPostsLoading ? [...Array(5)] : sortedPosts).map((obj, index) =>
             isPostsLoading ? (
               <Post key={index} isLoading={true} />
@@ -78,7 +79,8 @@ export const Home = () => {
           )}
         </Grid>
 
-        <Grid xs={4} item>
+        {/* <Grid xs={4} item> */}
+        <Grid item xs={12} md={4}>
           <TagsBlock items={tags.items} isLoading={isTagsLoading} />
 
           <CommentsBlock
