@@ -1,52 +1,123 @@
-.buttons {
+SCSS .buttons {
   display: flex;
   align-items: center;
 
-  button, a {
+  /* 1. Uzlabojam bāzes stilu abiem elementiem */
+  button,
+  a {
     margin-left: 10px;
     text-decoration: none;
-    transition: all 0.2s ease;
+    transition: all 0.2s ease-in-out;
+    display: inline-flex; // Nodrošina labāku centrēšanu
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: inherit;
+    border: none; // Ja tas ir parasts button
   }
 
-  /* Īpašs stils reģistrācijas pogai, lai tā izceltos */
+  /* 2. Reģistrācijas poga - Galvenā darbība */
   .registerBtn {
-    background-color: #4361ee;
-    color: white;
-    border-radius: 5px;
-    padding: 8px 16px;
+    background-color: #4361ee !important; // Izmantojam !important, ja MUI to mēģina pārrakstīt
+    color: white !important;
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(67, 97, 238, 0.2);
+
+    &:hover {
+      background-color: #3149c6 !important;
+      box-shadow: 0 4px 12px rgba(67, 97, 238, 0.4);
+      transform: translateY(-1px); // Neliels pacēlums uz hover
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  /* 3. Ieejas poga - Sekundārā darbība */
+  .loginBtn {
+    color: #4361ee !important;
+    border: 1px solid #4361ee !important;
+    background-color: transparent !important;
+    border-radius: 6px;
+    padding: 8px 18px;
     font-weight: 500;
 
     &:hover {
-      background-color: #3149c6;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background-color: rgba(67, 97, 238, 0.08) !important;
+      border-color: #3149c6 !important;
     }
   }
 
-  /* Stils "Ieeja" pogai, lai tā būtu neitrālāka */
-  .loginBtn {
-    color: #4361ee;
-    border: 1px solid #4361ee;
-    border-radius: 5px;
-    padding: 8px 16px;
-
-    &:hover {
-      background-color: rgba(67, 97, 238, 0.05);
-    }
-  }
-
+  /* 4. Mobilais skats - Pilnīga kontrole */
   @media (max-width: 600px) {
     width: 100%;
     justify-content: center;
-    margin-top: 5px;
+    margin-top: 10px;
+    gap: 8px; // Modernāks veids kā veidot atstarpes starp flex elementiem
 
-    button, a {
-      margin: 0 4px !important;
-      font-size: 11px; // Nedaudz mazāks, lai abi ietilptu vienā rindā
-      padding: 6px 10px;
-      white-space: nowrap; // Neļauj tekstam pārlēkt jaunā rindā pogas iekšā
+    button,
+    a {
+      margin: 0 !important; // Noņemam margin-left un izmantojam gap
+      font-size: 12px !important;
+      padding: 10px 14px !important; // Lielāks laukums pirkstam
+      flex: 1; // Pogas aizpildīs pieejamo vietu vienmērīgi
+      max-width: 160px;
+      white-space: nowrap;
     }
-    
-    .registerBtn, .loginBtn {
+
+    // .buttons {
+    //   display: flex;
+    //   align-items: center;
+
+    //   button, a {
+    //     margin-left: 10px;
+    //     text-decoration: none;
+    //     transition: all 0.2s ease;
+    //   }
+
+    //   /* Īpašs stils reģistrācijas pogai, lai tā izceltos */
+    //   .registerBtn {
+    //     background-color: #4361ee;
+    //     color: white;
+    //     border-radius: 5px;
+    //     padding: 8px 16px;
+    //     font-weight: 500;
+
+    //     &:hover {
+    //       background-color: #3149c6;
+    //       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    //     }
+    //   }
+
+    //   /* Stils "Ieeja" pogai, lai tā būtu neitrālāka */
+    //   .loginBtn {
+    //     color: #4361ee;
+    //     border: 1px solid #4361ee;
+    //     border-radius: 5px;
+    //     padding: 8px 16px;
+
+    //     &:hover {
+    //       background-color: rgba(67, 97, 238, 0.05);
+    //     }
+    //   }
+
+    //   @media (max-width: 600px) {
+    //     width: 100%;
+    //     justify-content: center;
+    //     margin-top: 5px;
+
+    //     button, a {
+    //       margin: 0 4px !important;
+    //       font-size: 11px; // Nedaudz mazāks, lai abi ietilptu vienā rindā
+    //       padding: 6px 10px;
+    //       white-space: nowrap; // Neļauj tekstam pārlēkt jaunā rindā pogas iekšā
+    //     }
+
+    .registerBtn,
+    .loginBtn {
       padding: 6px 10px; // Kompaktākas pogas telefonā
     }
   }
