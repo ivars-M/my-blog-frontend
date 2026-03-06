@@ -56,10 +56,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 
   /* PAPILDINĀTS: Telefona skatam */
   @media (max-width: 600px) {
     flex-direction: column;
+    justify-content: center;
     gap: 15px;
     text-align: center;
   }
