@@ -10,7 +10,7 @@ import Avatar from "@mui/material/Avatar";
 
 import axios from "../../axios";
 
-import styles from "./Login.module.scss";
+import styles from "./Registration.module.scss";
 import {
   // fetchAuth,
   fetchRegister,
