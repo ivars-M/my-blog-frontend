@@ -22,6 +22,13 @@ export const Registration = () => {
   const isAuth = useSelector(selectIsAuth);
   const dispatch = useDispatch();
   const [avatarUrl, setAvatarUrl] = React.useState("");
+  const isFullUrl = avatarUrl?.startsWith("http");
+  const finalAvatarUrl = isFullUrl
+    ? avatarUrl
+    : avatarUrl
+    ? `https://my-blog-backend-qniv.onrender.com${avatarUrl}`
+    : "";
+
   const handleChangeFile = async (event) => {
     try {
       const formData = new FormData();
