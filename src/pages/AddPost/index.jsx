@@ -98,7 +98,10 @@ export const AddPost = () => {
   if (!window.localStorage.getItem("token") && !isAuth) {
     return <Navigate to="/" />;
   }
-
+  const isFullUrl = imageUrl?.startsWith("http");
+  const finalPreviewUrl = isFullUrl
+    ? imageUrl
+    : `https://my-blog-backend-qniv.onrender.com${imageUrl}`;
   return (
     <Paper style={{ padding: 30 }}>
       <Button
@@ -125,7 +128,12 @@ export const AddPost = () => {
           </Button>
           <img
             className={styles.image}
-            src={imageUrl.startsWith('http') ? imageUrl : `https://my-blog-backend-qniv.onrender.com${imageUrl}`}
+            src={finalPreviewUrl}
+            // src={
+            //   imageUrl.startsWith("http")
+            //     ? imageUrl
+            //     : `https://my-blog-backend-qniv.onrender.com${imageUrl}`
+            // }
             // src={`${axios.defaults.baseURL}${imageUrl}`}
             alt="Uploaded"
           />
