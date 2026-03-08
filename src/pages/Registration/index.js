@@ -83,10 +83,7 @@ export const Registration = () => {
         Izveidot kontu
       </Typography>
       <div className={styles.avatar}>
-        <Avatar
-          sx={{ width: 100, height: 100, grey }}
-          src={avatarUrl ? `${axios.defaults.baseURL}${avatarUrl}` : ""}
-        />
+        <Avatar sx={{ width: 100, height: 100, grey }} src={finalAvatarUrl} />
         <label>
           <input type="file" onChange={handleChangeFile} hidden />
           <Button variant="outlined" component="span">
