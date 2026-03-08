@@ -89,6 +89,12 @@ export const ProfileEdit = () => {
       alert("Neizdevās nomainīt paroli");
     }
   };
+  const isFullUrl = avatarUrl?.startsWith('http');
+const finalAvatarUrl = isFullUrl 
+  ? avatarUrl 
+  : avatarUrl 
+    ? `https://my-blog-backend-qniv.onrender.com${avatarUrl}` 
+    : "";
 
   return (
     <Paper sx={{ maxWidth: 500, mx: "auto", p: 4, mt: 4 }}>
@@ -99,9 +105,7 @@ export const ProfileEdit = () => {
       <Stack spacing={2}>
         <Box textAlign="center">
           <Avatar
-            src={
-              avatarUrl ? `${axios.defaults.baseURL}${avatarUrl}` : undefined
-            }
+           src={finalAvatarUrl}
             sx={{ width: 100, height: 100, mx: "auto", mb: 2 }}
           />
           <Button variant="outlined" component="label">
