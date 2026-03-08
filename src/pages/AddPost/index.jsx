@@ -125,7 +125,8 @@ export const AddPost = () => {
           </Button>
           <img
             className={styles.image}
-            src={`${axios.defaults.baseURL}${imageUrl}`}
+            src={imageUrl.startsWith('http') ? imageUrl : `https://my-blog-backend-qniv.onrender.com${imageUrl}`}
+            // src={`${axios.defaults.baseURL}${imageUrl}`}
             alt="Uploaded"
           />
         </>
