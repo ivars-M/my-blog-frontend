@@ -15,7 +15,6 @@ import { fetchRemovePost } from "../../redux/slices/posts";
 import styles from "./Post.module.scss";
 import { UserInfo } from "../UserInfo";
 import { PostSkeleton } from "./Skeleton";
-
 export const Post = ({
   id,
   title,
@@ -32,14 +31,23 @@ export const Post = ({
   onPostDelete,
 }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // 1. GUDRA LOĢIKA LIELAJAI BILDEI
+  const isImageFullUrl = imageUrl?.startsWith("http");
+  const finalImageUrl = isImageFullUrl
+    ? imageUrl
+    : imageUrl
+    ? `${axios.defaults.baseURL}${imageUrl}`
+    : "";
+
+  // 2. GUDRA LOĢIKA AVATĀRAM
   const isFullAvatar = user?.avatarUrl?.startsWith("http");
   const finalAvatarUrl = isFullAvatar
     ? user.avatarUrl
     : user?.avatarUrl
-    ? `https://my-blog-backend-qniv.onrender.com${user.avatarUrl}`
+    ? `${axios.defaults.baseURL}${user.avatarUrl}`
     : "";
-
-  const dispatch = useDispatch();
 
   if (isLoading) {
     return <PostSkeleton />;
@@ -49,24 +57,20 @@ export const Post = ({
     if (window.confirm("Tiešām gribat dzēst rakstu?")) {
       dispatch(fetchRemovePost(id));
       navigate("/");
-
       if (onPostDelete) {
-        onPostDelete(); // ← ŠEIT!
+        onPostDelete();
       }
     }
   };
 
   const hasImage =
     imageUrl &&
-    typeof imageUrl === "string" &&
-    imageUrl.trim() !== "" &&
     imageUrl !== "null" &&
     imageUrl !== "undefined" &&
-    !imageUrl.includes("null");
+    imageUrl.trim() !== "";
 
   function formatDate(iso) {
     return new Date(iso).toLocaleString("lv-LV", {
-      timeZone: "Europe/Riga",
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
@@ -74,7 +78,7 @@ export const Post = ({
       minute: "2-digit",
     });
   }
-  console.log("Posta lietotājs:", user); // Šis parādīs, kas "lācītim vēderā"
+
   return (
     <div className={clsx(styles.root, { [styles.rootFull]: isFullPost })}>
       {isEditable && (
@@ -93,13 +97,14 @@ export const Post = ({
       {hasImage && (
         <img
           className={clsx(isFullPost ? styles.imageFull : styles.imageSmall)}
-          src={`${axios.defaults.baseURL}${imageUrl}`}
+          src={finalImageUrl} // IZMAIŅA ŠEIT: izmantojam finalImageUrl
           alt={title}
         />
       )}
 
       <div className={styles.wrapper}>
         <div className={styles.indention}>
+          {/* UserInfo tagad saņem jau apstrādātu avataru */}
           <UserInfo
             fullName={user?.fullName || "Anonīms autors"}
             avatarUrl={finalAvatarUrl}

@@ -1,24 +1,29 @@
 import React from "react";
-// import { Link } from "react-router-dom";
 import axios from "../../axios";
 import Avatar from "@mui/material/Avatar";
 import styles from "./UserInfo.module.scss";
 
 export const UserInfo = ({ fullName, avatarUrl, additionalText }) => {
-  const safeAvatar =
+  // 1. Pārbaudām, vai avatarUrl vispār eksistē un nav kļūdains
+  const hasAvatar =
     avatarUrl &&
     avatarUrl !== "null" &&
     avatarUrl !== "undefined" &&
-    avatarUrl !== "" &&
-    !avatarUrl.includes("null")
-      ? `${axios.defaults.baseURL}${avatarUrl}`
-      : "/no-avatar.png";
+    avatarUrl !== "";
+
+  // 2. GUDRA SAITE: Ja tā sākas ar "http", izmantojam to pašu.
+  // Ja nē (vecās bildes), pieliekam servera adresi.
+  const finalAvatarPath = hasAvatar
+    ? avatarUrl.startsWith("http")
+      ? avatarUrl
+      : `${axios.defaults.baseURL}${avatarUrl}`
+    : "/no-avatar.png";
 
   return (
     <div className={styles.root}>
       <Avatar
         className={styles.avatar}
-        src={safeAvatar}
+        src={finalAvatarPath}
         alt={fullName || "Anonīms autors"}
       />
       <div className={styles.userDetails}>
