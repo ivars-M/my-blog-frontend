@@ -20,6 +20,7 @@ export const Header = () => {
     if (window.confirm("Tiešām gribat iziet?")) dispatch(logout());
     window.localStorage.removeItem("token");
   };
+  
 
   return (
     <div className={styles.root}>

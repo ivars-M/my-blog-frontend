@@ -12,6 +12,13 @@ import {
 
 const UserMenu = ({ user, onDeleteProfile, onLogout }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
+  const isFullUrl = user?.avatarUrl?.startsWith("http");
+  const finalAvatarUrl = isFullUrl
+    ? user.avatarUrl
+    : user?.avatarUrl
+    ? `${axios.defaults.baseURL}${user.avatarUrl}`
+    : undefined;
 
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -20,16 +27,11 @@ const UserMenu = ({ user, onDeleteProfile, onLogout }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const navigate = useNavigate();
 
   return (
     <>
       <Avatar
-        src={
-          user?.avatarUrl
-            ? `${axios.defaults.baseURL}${user.avatarUrl}`
-            : undefined
-        }
+        src={finalAvatarUrl}
         sx={{
           width: 40,
           height: 40,
