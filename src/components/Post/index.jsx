@@ -74,7 +74,7 @@ export const Post = ({
       minute: "2-digit",
     });
   }
-
+  console.log("Posta lietotājs:", user); // Šis parādīs, kas "lācītim vēderā"
   return (
     <div className={clsx(styles.root, { [styles.rootFull]: isFullPost })}>
       {isEditable && (
