@@ -68,6 +68,10 @@ export const Post = ({
       minute: "2-digit",
     });
   }
+  const isFullUrl = imageUrl?.startsWith('http');
+  const finalImageUrl = isFullUrl 
+    ? imageUrl 
+    : `https://my-blog-backend-qniv.onrender.com${imageUrl}`;
 
   return (
     <div className={clsx(styles.root, { [styles.rootFull]: isFullPost })}>
@@ -87,7 +91,7 @@ export const Post = ({
       {hasImage && (
         <img
           className={clsx(isFullPost ? styles.imageFull : styles.imageSmall)}
-          src={`${axios.defaults.baseURL}${imageUrl}`}
+          src={finalImageUrl} // Izmantojam jau gatavo mainīgo
           alt={title}
         />
       )}
