@@ -1,5 +1,5 @@
 import React from "react";
-// import axios from "../../axios";
+import axios from "../../axios";
 import { useDispatch } from "react-redux";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
@@ -32,6 +32,12 @@ export const Post = ({
   onPostDelete,
 }) => {
   const navigate = useNavigate();
+  const isFullAvatar = user?.avatarUrl?.startsWith("http");
+  const finalAvatarUrl = isFullAvatar
+    ? user.avatarUrl
+    : user?.avatarUrl
+    ? `https://my-blog-backend-qniv.onrender.com${user.avatarUrl}`
+    : "";
 
   const dispatch = useDispatch();
 
@@ -68,10 +74,6 @@ export const Post = ({
       minute: "2-digit",
     });
   }
-  const isFullUrl = imageUrl?.startsWith('http');
-  const finalImageUrl = isFullUrl 
-    ? imageUrl 
-    : `https://my-blog-backend-qniv.onrender.com${imageUrl}`;
 
   return (
     <div className={clsx(styles.root, { [styles.rootFull]: isFullPost })}>
@@ -91,7 +93,7 @@ export const Post = ({
       {hasImage && (
         <img
           className={clsx(isFullPost ? styles.imageFull : styles.imageSmall)}
-          src={finalImageUrl} // Izmantojam jau gatavo mainīgo
+          src={`${axios.defaults.baseURL}${imageUrl}`}
           alt={title}
         />
       )}
@@ -100,7 +102,7 @@ export const Post = ({
         <div className={styles.indention}>
           <UserInfo
             fullName={user?.fullName || "Anonīms autors"}
-            avatarUrl={user?.avatarUrl}
+            avatarUrl={finalAvatarUrl}
             additionalText={formatDate(createdAt)}
           />
 
