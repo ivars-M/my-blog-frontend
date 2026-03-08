@@ -13,12 +13,15 @@ import {
 const UserMenu = ({ user, onDeleteProfile, onLogout }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
+  const avatarUrl = user?.avatarUrl;
   const isFullUrl = user?.avatarUrl?.startsWith("http");
   const finalAvatarUrl = isFullUrl
     ? user.avatarUrl
     : user?.avatarUrl
-    ? `${axios.defaults.baseURL}${user.avatarUrl}`
+    ? `https://my-blog-backend-qniv.onrender.com${avatarUrl}`
     : undefined;
+
+  console.log("Lietotāja bilde:", finalAvatarUrl);
 
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
