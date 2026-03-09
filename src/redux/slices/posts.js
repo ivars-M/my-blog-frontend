@@ -5,8 +5,9 @@ import axios from "../../axios.js";
 //   const { data } = await axios.get("/posts");
 //   return data;
 // });
-export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
-  const { data } = await axios.get("/posts");
+export const fetchPosts = createAsyncThunk("posts/fetchPosts", async (tag) => {
+  const url = tag ? `/posts/tags/${tag}` : "/posts";
+  const { data } = await axios.get(url);
   console.log("DATA:", data);
   return data;
 });

@@ -30,6 +30,7 @@ function App() {
           <Route path="/profile/edit" element={<ProfileEdit />} />
           <Route path="/register" element={<Registration />} />
           <Route path="/tags/:tag" element={<TagPage />} />
+          <Route path="/tags/:name" element={<Home />} />
         </Routes>
       </Container>
     </>

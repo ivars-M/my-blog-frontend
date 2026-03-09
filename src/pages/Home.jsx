@@ -1,4 +1,5 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -10,6 +11,7 @@ import { TagsBlock } from "../components/TagsBlock";
 import { CommentsBlock } from "../components/CommentsBlock";
 
 export const Home = () => {
+  const { name } = useParams();
   const dispatch = useDispatch();
 
   const userData = useSelector((state) => state.auth.data);
@@ -39,9 +41,15 @@ export const Home = () => {
       .then((res) => setLatestComments(res.data))
       .catch((err) => console.warn(err));
   }, [posts.items]);
+  React.useEffect(() => {
+    // Sūtam tagu (ja tāds ir) uz fetchPosts
+    dispatch(fetchPosts(name));
+    dispatch(fetchTags());
+  }, [name, dispatch]); // Kad mainās 'name' (tags), pārlādējam rakstus
 
   return (
     <>
+      {name && <h2 style={{ marginBottom: 20 }}>Raksti ar tagu: #{name}</h2>}
       <Tabs
         style={{ marginBottom: 15 }}
         value={tabIndex}
@@ -53,7 +61,7 @@ export const Home = () => {
 
       <Grid container spacing={4}>
         <Grid item xs={12} md={8}>
-        {/* <Grid xs={8} item> */}
+          {/* <Grid xs={8} item> */}
           {(isPostsLoading ? [...Array(5)] : sortedPosts).map((obj, index) =>
             isPostsLoading ? (
               <Post key={index} isLoading={true} />
