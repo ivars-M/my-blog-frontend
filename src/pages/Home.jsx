@@ -22,30 +22,31 @@ export const Home = () => {
 
   const [tabIndex, setTabIndex] = React.useState(0);
 
+  // VIENS UN VIENĪGAIS useEffect rakstiem un tagiem
   React.useEffect(() => {
-    dispatch(fetchPosts());
+    dispatch(fetchPosts(name)); // 'name' nāks no useParams
     dispatch(fetchTags());
-  }, [dispatch]);
+  }, [name, dispatch]); // Tiklīdz mainās tags URL, mēs pārlādējam
 
-  const sortedPosts = [...posts.items].sort((a, b) => {
-    return tabIndex === 0
-      ? new Date(b.createdAt) - new Date(a.createdAt)
-      : b.viewsCount - a.viewsCount;
-  });
+  // DROŠA kārtošana: pievienojam pārbaudi, vai items vispār ir masīvs
+  const sortedPosts = React.useMemo(() => {
+    if (!posts.items || !Array.isArray(posts.items)) return [];
 
+    return [...posts.items].sort((a, b) => {
+      return tabIndex === 0
+        ? new Date(b.createdAt) - new Date(a.createdAt)
+        : b.viewsCount - a.viewsCount;
+    });
+  }, [posts.items, tabIndex]);
+
+  // Komentāru ielāde (atstājam kā bija)
   const [latestComments, setLatestComments] = React.useState([]);
-
   React.useEffect(() => {
     axios
       .get("/comments")
       .then((res) => setLatestComments(res.data))
       .catch((err) => console.warn(err));
-  }, [posts.items]);
-  React.useEffect(() => {
-    // Sūtam tagu (ja tāds ir) uz fetchPosts
-    dispatch(fetchPosts(name));
-    dispatch(fetchTags());
-  }, [name, dispatch]); // Kad mainās 'name' (tags), pārlādējam rakstus
+  }, []); // Ielādējam tikai vienreiz palaižot lapu
 
   console.log("Pašreizējie raksti:", posts.items);
   return (
