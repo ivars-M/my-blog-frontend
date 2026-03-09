@@ -2,6 +2,9 @@ import React from "react";
 import axios from "../axios";
 import { Link } from "react-router-dom";
 
+import IconButton from "@mui/material/IconButton";
+import ClearIcon from "@mui/icons-material/Clear";
+
 import { SideBlock } from "./SideBlock";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -109,6 +112,21 @@ export const CommentsBlock = ({
                     />
                     {/* ... (dzēšanas poga paliek tāda pati) */}
                   </ListItem>
+
+                  {!isLoading && currentUserId === obj.user?._id && (
+                    <IconButton
+                      onClick={(e) => {
+                        e.preventDefault(); // Svarīgi: lai neaizietu uz linku!
+                        onDelete(obj._id);
+                      }}
+                      sx={{
+                        color: "rgba(0, 0, 0, 0.4)",
+                        "&:hover": { color: "red" },
+                      }}
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  )}
                 </Link>
               )}
               <Divider
