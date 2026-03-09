@@ -116,16 +116,26 @@ export const FullPost = () => {
           onDelete={handleDeleteComment}
         />
 
-        {/* Komentāru ievades forma - TAGAD ĀRPUSĒ, tūlīt zem saraksta */}
+        {/* IEVADES LOGS UN POGA - Tagad tie ir brīvi un redzami! */}
         <div
-          style={{ marginTop: 20, padding: "20px", border: "1px solid #eee" }}
+          style={{
+            marginTop: 20,
+            padding: "20px",
+            border: "1px solid #eee",
+            background: "#fff",
+          }}
         >
           <textarea
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
             placeholder="Raksti komentāru..."
             rows={3}
-            style={{ width: "100%", padding: 10, borderRadius: "5px" }}
+            style={{
+              width: "100%",
+              padding: 10,
+              borderRadius: "5px",
+              border: "1px solid #ccc",
+            }}
           />
           <button
             onClick={handleAddComment}
@@ -137,13 +147,14 @@ export const FullPost = () => {
               border: "none",
               cursor: "pointer",
               borderRadius: "5px",
+              fontWeight: "bold",
             }}
           >
             Pievienot komentāru
           </button>
         </div>
       </div>{" "}
-      {/* ŠĪ BIJA TRŪKSTOŠĀ IEKAVA, kas noslēdz komentāru sadaļu */}
+      {/* Šis </div> noslēdz marginTop: 40 bloku */}
     </>
   );
 };
