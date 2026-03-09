@@ -67,12 +67,12 @@ $blue: #4361ee;
 }
 
 .imageFull {
-  width: 70%; /* Samazinām platumu uz 70% */
-  height: auto; /* Augstums pielāgojas automātiski, lai nekas netiktu nogriezts */
-  display: block; /* Padarām par bloku, lai varētu centrēt */
-  margin: 0 auto 20px; /* Centrējam bildi un pieliekam atstarpi apakšā */
-  object-fit: contain; /* Nodrošina, ka visa bilde ietilpst laukumā */
-  border-radius: 8px; /* Pēc izvēles: noapaļoti stūri */
+  width: 70%;
+  height: auto; /* Obligāti auto, lai Ronam viss būtu vietā */
+  display: block;
+  margin: 0 auto 30px; /* Centrējam un pieliekam atstarpi līdz tekstam */
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Smuks ēnas efekts */
 }
 
 .rootFull {
