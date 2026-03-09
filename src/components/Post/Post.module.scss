@@ -49,15 +49,12 @@ $blue: #4361ee;
 }
 
 .imageFull {
-  width: 100%; // Atvērtā rakstā bildei jābūt pa visu platumu
-  max-height: 450px;
-  object-fit: cover;
-  border-radius: 8px;
-
-  @media (max-width: 600px) {
-    border-radius: 0;
-    max-height: 250px;
-  }
+  width: 70%; /* Samazinām platumu uz 70% */
+  height: auto; /* Augstums pielāgojas automātiski, lai nekas netiktu nogriezts */
+  display: block; /* Padarām par bloku, lai varētu centrēt */
+  margin: 0 auto 20px; /* Centrējam bildi un pieliekam atstarpi apakšā */
+  object-fit: contain; /* Nodrošina, ka visa bilde ietilpst laukumā */
+  border-radius: 8px; /* Pēc izvēles: noapaļoti stūri */
 }
 
 .rootFull {
