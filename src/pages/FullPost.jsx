@@ -104,45 +104,46 @@ export const FullPost = () => {
       >
         <ReactMarkdown>{data.text}</ReactMarkdown>
       </Post>
-
       {/* Komentāru sadaļa */}
       <div style={{ marginTop: 40 }}>
         <h2>Komentāri ({comments.length})</h2>
 
         {/* Komentāru saraksts */}
-
         <CommentsBlock
           items={comments}
           isLoading={false}
           currentUserId={userData?._id}
           onDelete={handleDeleteComment}
-        >
-          {/* {komentāra ievades forma} */}
-          <div style={{ marginTop: 20 }}>
-            <textarea
-              value={commentText}
-              onChange={(e) => setCommentText(e.target.value)}
-              placeholder="Raksti komentāru..."
-              rows={3}
-              style={{ width: "100%", padding: 10 }}
-            />
+        />
 
-            <button
-              onClick={handleAddComment}
-              style={{
-                marginTop: 10,
-                padding: "10px 20px",
-                background: "#1976d2",
-                color: "white",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              Pievienot komentāru
-            </button>
-          </div>
-        </CommentsBlock>
-      </div>
+        {/* Komentāru ievades forma - TAGAD ĀRPUSĒ, tūlīt zem saraksta */}
+        <div
+          style={{ marginTop: 20, padding: "20px", border: "1px solid #eee" }}
+        >
+          <textarea
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            placeholder="Raksti komentāru..."
+            rows={3}
+            style={{ width: "100%", padding: 10, borderRadius: "5px" }}
+          />
+          <button
+            onClick={handleAddComment}
+            style={{
+              marginTop: 10,
+              padding: "10px 20px",
+              background: "#1976d2",
+              color: "white",
+              border: "none",
+              cursor: "pointer",
+              borderRadius: "5px",
+            }}
+          >
+            Pievienot komentāru
+          </button>
+        </div>
+      </div>{" "}
+      {/* ŠĪ BIJA TRŪKSTOŠĀ IEKAVA, kas noslēdz komentāru sadaļu */}
     </>
   );
 };
