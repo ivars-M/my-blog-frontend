@@ -35,15 +35,33 @@ $blue: #4361ee;
   }
 }
 
+// .imageSmall {
+//   width: 100px;
+//   height: 150px;
+//   object-fit: cover;
+//   border-radius: 8px;
+
+//   @media (max-width: 600px) {
+//     width: 100%;
+//     height: 200px;
+//     border-radius: 0;
+//   }
+// }
 .imageSmall {
-  width: 100px;
-  height: 150px;
-  object-fit: cover;
+  width: 100%; /* Aizņem visu pieejamo rāmja platumu */
+  max-width: 300px; /* Bet ne vairāk par 300px, lai nav milzīga */
+  height: auto; /* Augstums pielāgojas pats – galva būs vietā! */
+  aspect-ratio: 16 / 9; /* Pēc izvēles: tur bildi smukā proporcijā */
+  object-fit: contain; /* Ja bilde ir citādāka, tā tiks ietilpināta, nevis nogriezta */
+  background-color: #f0f0f0; /* Pelēks fons tukšajām malām, ja tādas būs */
   border-radius: 8px;
+  display: block;
+  margin-bottom: 15px;
 
   @media (max-width: 600px) {
     width: 100%;
-    height: 200px;
+    max-width: none;
+    height: auto;
     border-radius: 0;
   }
 }
