@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import Container from "@mui/material/Container";
 
 import { Header } from "./components";
-import { TagPage } from "./pages/TagPage";
+// import { TagPage } from "./pages/TagPage";
 import { ProfileEdit } from "./pages/ProfileEdit";
 
 import { Home, FullPost, Registration, AddPost, Login } from "./pages";

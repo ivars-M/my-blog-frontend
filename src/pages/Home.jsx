@@ -47,6 +47,7 @@ export const Home = () => {
     dispatch(fetchTags());
   }, [name, dispatch]); // Kad mainās 'name' (tags), pārlādējam rakstus
 
+  console.log("Pašreizējie raksti:", posts.items);
   return (
     <>
       {name && <h2 style={{ marginBottom: 20 }}>Raksti ar tagu: #{name}</h2>}
