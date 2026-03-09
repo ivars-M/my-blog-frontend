@@ -2,13 +2,13 @@ $blue: #4361ee;
 
 .root {
   display: flex;
+  align-items: stretch;
   background-color: #fff;
   border: 1px solid #dedede;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   position: relative;
-  align-items: center;
 
   @media (max-width: 600px) {
     flex-direction: column;
@@ -36,16 +36,15 @@ $blue: #4361ee;
 }
 
 .imageSmall {
-  width: 100%;
-  height: 250px; /* Fiksēts augstums, lai visi raksti sarakstā būtu vienādi */
-  object-fit: contain; /* Bilde IEKĻAUJAS rāmī pilnībā (nekas netiek nogriezts) */
-  background-color: #fff; /* Balts fons, lai bilde saplūst ar raksta fonu */
-  display: block;
-  border-radius: 8px;
-  padding: 5px; /* Neliela atstarpe, lai bilde "nelec" pie paša rāmja */
+  width: 250px; /* Fiksēts platums mazajai bildei */
+  height: 250px; /* Fiksēts augstums */
+  object-fit: cover; /* AIZPILDA rāmi (nekas nepaliek karājoties) */
+  object-position: top; /* Prioritāte galvai */
+  flex-shrink: 0; /* Neļauj tekstam saspiest bildi */
 
-  @media (max-width: 600px) {
-    height: 200px; /* Mazāks augstums mobilajās ierīcēs */
+  @media (max-width: 650px) {
+    width: 100%;
+    height: 200px;
   }
 }
 
@@ -63,8 +62,11 @@ $blue: #4361ee;
 }
 
 .wrapper {
-  justify-content: left;
-  padding: 10px 20px 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Šis noliek autoru un tekstu VIDŪ pret bildi */
+  flex-grow: 1; /* Aizņem visu atlikušo vietu pa labi */
 
   @media (max-width: 600px) {
     padding: 15px;
