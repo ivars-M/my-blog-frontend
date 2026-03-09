@@ -36,7 +36,7 @@ $blue: #4361ee;
 }
 
 .imageSmall {
-  width: 100%; /* Fiksēts platums mazajai bildei */
+  width: 25% /* Fiksēts platums mazajai bildei */
   height: auto; /* Fiksēts augstums */
   object-fit: cover; /* AIZPILDA rāmi (nekas nepaliek karājoties) */
   object-position: top; /* Prioritāte galvai */
