@@ -92,12 +92,26 @@ export const Home = () => {
         {/* <Grid xs={4} item> */}
         <Grid item xs={12} md={4}>
           <TagsBlock items={tags.items} isLoading={isTagsLoading} />
-
           <CommentsBlock
             items={latestComments}
             isLoading={false}
-            currentUserId={null}
-            onDelete={() => {}}
+            currentUserId={userData?._id} // Tagad React zinās, kurš ir "savējais"
+            onDelete={(id) => {
+              if (window.confirm("Vai tiešām vēlies dzēst komentāru?")) {
+                axios
+                  .delete(`/comments/${id}`)
+                  .then(() => {
+                    // Atjaunojam sarakstu lokāli, lai komentārs pazustu uzreiz
+                    setLatestComments((prev) =>
+                      prev.filter((obj) => obj._id !== id),
+                    );
+                  })
+                  .catch((err) => {
+                    console.warn(err);
+                    alert("Neizdevās izdzēst komentāru");
+                  });
+              }
+            }}
           />
         </Grid>
       </Grid>
