@@ -37,14 +37,15 @@ $blue: #4361ee;
 
 .imageSmall {
   width: 100%;
-  height: 250px; /* Palielinām augstumu, lai izskatās nopietnāk */
-  object-fit: cover; /* Bilde aizpilda visu laukumu bez pelēkām malām */
-  object-position: top; /* Prioritāte ir bildes augšdaļai (galvai) */
-  border-radius: 8px 0 0 8px; /* Noapaļojam tikai kreisos stūrus, ja bilde ir kreisajā pusē */
+  height: 250px; /* Fiksēts augstums, lai visi raksti sarakstā būtu vienādi */
+  object-fit: contain; /* Bilde IEKĻAUJAS rāmī pilnībā (nekas netiek nogriezts) */
+  background-color: #fff; /* Balts fons, lai bilde saplūst ar raksta fonu */
+  display: block;
+  border-radius: 8px;
+  padding: 5px; /* Neliela atstarpe, lai bilde "nelec" pie paša rāmja */
 
   @media (max-width: 600px) {
-    height: 200px;
-    border-radius: 8px 8px 0 0;
+    height: 200px; /* Mazāks augstums mobilajās ierīcēs */
   }
 }
 
