@@ -55,15 +55,18 @@ export const ProfileEdit = () => {
       const formData = new FormData();
       formData.append("image", event.target.files[0]);
 
+      // 1. Augšupielādējam uz Cloudinary
       const { data } = await axios.post("/upload/avatar", formData);
 
-      const updated = await axios.patch("/auth/avatar", {
-        avatarUrl: data.url,
+      // 2. Saglabājam saiti lietotāja profilā
+      await axios.patch("/auth/avatar", {
+        avatarUrl: data.url, // Cloudinary pilnais URL
       });
 
-      setAvatarUrl(updated.data.avatarUrl);
-      dispatch(updateUser(updated.data));
+      // 3. Ieteicams: Atjaunot datus Redux vai vienkārši:
+      window.location.reload();
     } catch (err) {
+      console.warn(err);
       alert("Neizdevās augšupielādēt avataru");
     }
   };
@@ -89,11 +92,11 @@ export const ProfileEdit = () => {
       alert("Neizdevās nomainīt paroli");
     }
   };
-  const isFullUrl = avatarUrl?.startsWith('http');
-const finalAvatarUrl = isFullUrl 
-  ? avatarUrl 
-  : avatarUrl 
-    ? `https://my-blog-backend-qniv.onrender.com${avatarUrl}` 
+  const isFullUrl = avatarUrl?.startsWith("http");
+  const finalAvatarUrl = isFullUrl
+    ? avatarUrl
+    : avatarUrl
+    ? `https://my-blog-backend-qniv.onrender.com${avatarUrl}`
     : "";
 
   return (
@@ -105,7 +108,7 @@ const finalAvatarUrl = isFullUrl
       <Stack spacing={2}>
         <Box textAlign="center">
           <Avatar
-           src={finalAvatarUrl}
+            src={finalAvatarUrl}
             sx={{ width: 100, height: 100, mx: "auto", mb: 2 }}
           />
           <Button variant="outlined" component="label">
