@@ -13,7 +13,7 @@
 }
 
 .image {
-  width: 100%; // Lai neiziet no rāmjiem
+  width: auto; // Lai neiziet no rāmjiem
   max-height: 400px; // Ierobežojam augstumu
   object-fit: cover; // Lai bilde neizskatītos izstiepta
   border-radius: 15px;
