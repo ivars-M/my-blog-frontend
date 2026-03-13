@@ -13,10 +13,12 @@
 }
 
 .image {
-  width: auto; // Lai neiziet no rāmjiem
-  max-height: 400px; // Ierobežojam augstumu
-  object-fit: cover; // Lai bilde neizskatītos izstiepta
-  border-radius: 15px;
+  width: 70%; /* Tavs vēlamais izmērs */
+  height: auto; /* Nekas netiek apgriezts */
+  display: block;
+  margin: 0 auto 20px; /* Centrējam */
+  object-fit: contain;
+  border-radius: 10px;
 }
 
 .tags {
