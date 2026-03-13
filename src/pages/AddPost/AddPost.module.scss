@@ -29,10 +29,9 @@
   margin: 30px -30px;
 
   :global {
-    .CodeMirror {
-      min-height: 200px; // Minimālais augstums
-      max-height: 400px; // Maksimālais, lai neaiziet bezgalībā
-      overflow-y: auto; // Ja teksta par daudz, parādās ritjosla (scroll)
+    .cm-s-easymde {
+      border: 0;
+      font-size: 22px;
     }
     .editor-toolbar {
       border: 0;
