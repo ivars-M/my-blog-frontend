@@ -20,7 +20,7 @@ export const TagsBlock = ({ items, isLoading = true }) => {
           padding: "10px",
         }}
       >
-        {(isLoading ? [...Array(5)] : items).map((name, i) => (
+        {(isLoading ? [...Array(9)] : items).map((name, i) => (
           /* IZMAIŅA: Izmantojam komponenti 'component={Link}' tieši ListItemButton */
           <ListItem key={i} disablePadding sx={{ width: "auto" }}>
             {isLoading ? (
