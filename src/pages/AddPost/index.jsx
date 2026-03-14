@@ -50,7 +50,10 @@ export const AddPost = () => {
       const fields = {
         title,
         imageUrl: imageUrl,
-        tags: tags.split(","),
+        tags:
+          typeof tags === "string"
+            ? tags.split(",").map((tag) => tag.trim())
+            : tags,
         text,
       };
       console.log("FIELDS:", fields);
