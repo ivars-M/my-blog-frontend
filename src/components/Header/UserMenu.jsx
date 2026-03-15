@@ -1,5 +1,4 @@
 import React from "react";
-// import axios from "../../axios";
 import { useNavigate } from "react-router-dom";
 import {
   Avatar,
@@ -13,15 +12,14 @@ import {
 const UserMenu = ({ user, onDeleteProfile, onLogout }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
-  const avatarUrl = user?.avatarUrl;
-  const isFullUrl = user?.avatarUrl?.startsWith("http");
-  const finalAvatarUrl = isFullUrl
-    ? user.avatarUrl
-    : user?.avatarUrl
-    ? `https://my-blog-backend-qniv.onrender.com${avatarUrl}`
-    : undefined;
 
-  console.log("Lietotāja bilde:", finalAvatarUrl);
+  // 1. GUDRAIS URL: Ja bildes nav, obligāti atgriežam undefined
+  const avatarUrl = user?.avatarUrl;
+  const finalAvatarUrl = avatarUrl
+    ? avatarUrl.startsWith("http")
+      ? avatarUrl
+      : `https://my-blog-backend-qniv.onrender.com${avatarUrl}`
+    : undefined;
 
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -40,14 +38,15 @@ const UserMenu = ({ user, onDeleteProfile, onLogout }) => {
           height: 40,
           marginRight: 1,
           cursor: "pointer",
-          backgroundColor: user?.avatarUrl ? "transparent" : "#e5e5e5",
-          color: "#555",
+          // Ja ir bilde, fons caurspīdīgs, ja nav - smuks pelēks iniciālim
+          backgroundColor: finalAvatarUrl ? "transparent" : "#1976d2",
+          color: "#fff",
           fontWeight: 600,
-          filter: user?.avatarUrl ? "none" : "brightness(1.4)",
         }}
         onClick={handleOpen}
       >
-        {!user?.avatarUrl && user?.fullName?.[0]?.toUpperCase()}
+        {/* Šis parādīsies tikai tad, ja finalAvatarUrl ir undefined */}
+        {user?.fullName ? user.fullName[0].toUpperCase() : "U"}
       </Avatar>
 
       <Menu
@@ -65,10 +64,10 @@ const UserMenu = ({ user, onDeleteProfile, onLogout }) => {
       >
         <Box sx={{ px: 2, py: 1 }}>
           <Typography variant="subtitle1" fontWeight={600}>
-            {user.fullName}
+            {user?.fullName || "Lietotājs"}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {user.email}
+            {user?.email || ""}
           </Typography>
         </Box>
 
@@ -77,19 +76,23 @@ const UserMenu = ({ user, onDeleteProfile, onLogout }) => {
         <MenuItem
           onClick={() => {
             handleClose();
-            onDeleteProfile();
-          }}
-        >
-          Dzēst profilu
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            handleClose();
             navigate("/profile/edit");
           }}
         >
           Rediģēt profilu
         </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            onDeleteProfile();
+          }}
+          sx={{ color: "error.main" }}
+        >
+          Dzēst profilu
+        </MenuItem>
+
+        <Divider />
 
         <MenuItem
           onClick={() => {
