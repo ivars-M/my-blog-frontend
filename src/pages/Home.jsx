@@ -19,7 +19,7 @@ export const Home = () => {
 
   const isPostsLoading = posts.status === "loading";
   const isTagsLoading = tags.status === "loading";
-
+  const { searchQuery } = useSelector((state) => state.posts);
   const [tabIndex, setTabIndex] = React.useState(0);
 
   // VIENS UN VIENĪGAIS useEffect rakstiem un tagiem
@@ -31,13 +31,16 @@ export const Home = () => {
   // DROŠA kārtošana: pievienojam pārbaudi, vai items vispār ir masīvs
   const sortedPosts = React.useMemo(() => {
     if (!posts.items || !Array.isArray(posts.items)) return [];
+    const filteredPosts = posts.items.filter((obj) =>
+      obj.title.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
 
-    return [...posts.items].sort((a, b) => {
+    return [...filteredPosts].sort((a, b) => {
       return tabIndex === 0
         ? new Date(b.createdAt) - new Date(a.createdAt)
         : b.viewsCount - a.viewsCount;
     });
-  }, [posts.items, tabIndex]);
+  }, [posts.items, tabIndex, searchQuery]);
 
   // Komentāru ielāde (atstājam kā bija)
   const [latestComments, setLatestComments] = React.useState([]);

@@ -1,10 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../axios.js";
 
-// export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
-//   const { data } = await axios.get("/posts");
-//   return data;
-// });
 export const fetchPosts = createAsyncThunk("posts/fetchPosts", async (tag) => {
   const url = tag ? `/posts/tags/${tag}` : "/posts";
   const { data } = await axios.get(url);
@@ -32,11 +28,16 @@ const initialState = {
     items: [],
     status: "loading",
   },
+  searchQuery: "",
 };
 const postsSlice = createSlice({
   name: "posts",
   initialState,
-  reducers: {},
+  reducers: {
+    setSearchQuery: (state, action) => {
+      state.searchQuery = action.payload;
+    },
+  },
   extraReducers: {
     //raksta iegūšana
     [fetchPosts.pending]: (state) => {
@@ -72,4 +73,5 @@ const postsSlice = createSlice({
   },
 });
 
+export const { setSearchQuery } = postsSlice.actions;
 export const postsReducer = postsSlice.reducer;

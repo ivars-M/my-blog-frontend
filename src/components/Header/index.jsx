@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectIsAuth } from "../../redux/slices/auth";
+import { setSearchQuery } from "../../redux/slices/posts";
 
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -17,11 +18,15 @@ import styles from "./Header.module.scss";
 
 export const Header = () => {
   const dispatch = useDispatch();
+  const searchQuery = useSelector((state) => state.posts.searchQuery);
   const isAuth = useSelector(selectIsAuth);
   const user = useSelector((state) => state.auth.data);
 
   // Šis būs vajadzīgs meklētājam vēlāk (Home lapā)
-  const [searchValue, setSearchValue] = React.useState("");
+  // const [searchValue, setSearchValue] = React.useState("");
+  const onChangeSearch = (e) => {
+    dispatch(setSearchQuery(e.target.value));
+  };
 
   const onClickLogout = () => {
     if (window.confirm("Tiešām gribat iziet?")) {
@@ -48,8 +53,8 @@ export const Header = () => {
               size="small"
               placeholder="Meklēt rakstus..."
               variant="outlined"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
+              value={searchQuery}
+              onChange={onChangeSearch}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
