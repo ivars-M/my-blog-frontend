@@ -30,14 +30,17 @@ export const Home = () => {
   const sortedPosts = React.useMemo(() => {
     if (!posts.items || !Array.isArray(posts.items)) return [];
 
-    // 1. Filtrējam pēc meklētāja (izmantojam searchQuery no Redux)
+    const query = searchQuery.toLowerCase();
+
     const filtered = posts.items.filter((obj) => {
-      const inTitle = obj.title
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
-      const inTags = obj.tags.some((tag) =>
-        tag.toLowerCase().includes(searchQuery.toLowerCase()),
-      );
+      // 1. Meklējam virsrakstā
+      const inTitle = obj.title.toLowerCase().includes(query);
+
+      // 2. Meklējam tagos (droša pārbaude)
+      const inTags =
+        obj.tags && Array.isArray(obj.tags)
+          ? obj.tags.some((tag) => tag.toLowerCase().includes(query))
+          : false;
 
       return inTitle || inTags;
     });
