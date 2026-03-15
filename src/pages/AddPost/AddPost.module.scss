@@ -14,7 +14,7 @@
 
 .image {
   width: auto; /* Tavs vēlamais izmērs */
-  height: 500px;/* Nekas netiek apgriezts */
+  height: 500px; /* Nekas netiek apgriezts */
   display: block;
   margin: 0 auto 20px; /* Centrējam */
   object-fit: contain;
@@ -29,9 +29,9 @@
   margin: 30px -30px;
 
   :global {
-    .cm-s-easymde {
-      border: 0;
-      font-size: 22px;
+    .CodeMirror {
+      min-height: 150px;
+      max-height: 300px; // Šis ierobežos lielo logu
     }
     .editor-toolbar {
       border: 0;
