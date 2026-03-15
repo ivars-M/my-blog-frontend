@@ -31,9 +31,16 @@ export const Home = () => {
     if (!posts.items || !Array.isArray(posts.items)) return [];
 
     // 1. Filtrējam pēc meklētāja (izmantojam searchQuery no Redux)
-    const filtered = posts.items.filter((obj) =>
-      obj.title.toLowerCase().includes((searchQuery || "").toLowerCase()),
-    );
+    const filtered = posts.items.filter((obj) => {
+      const inTitle = obj.title
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const inTags = obj.tags.some((tag) =>
+        tag.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
+
+      return inTitle || inTags;
+    });
 
     // 2. Kārtojam nofiltrētos rezultātus
     return [...filtered].sort((a, b) => {
