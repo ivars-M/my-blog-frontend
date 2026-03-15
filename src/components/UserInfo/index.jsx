@@ -21,16 +21,11 @@ export const UserInfo = ({ fullName, avatarUrl, additionalText }) => {
 
   return (
     <div className={styles.root}>
-      <div className={styles.root}>
-        <Avatar
-          className={styles.avatar}
-          // Ja finalAvatarPath satur bildi (nav tukšs), rādām to
-          src={finalAvatarPath || undefined}
-          alt={fullName}
-        >
-          {fullName ? fullName[0].toUpperCase() : "A"}
-        </Avatar>
-      </div>
+      <Avatar
+        className={styles.avatar}
+        src={finalAvatarPath}
+        alt={fullName || "Anonīms autors"}
+      />
       <div className={styles.userDetails}>
         <span className={styles.userName}>{fullName || "Anonīms autors"}</span>
         <span className={styles.additional}>{additionalText}</span>
