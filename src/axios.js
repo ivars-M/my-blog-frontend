@@ -14,18 +14,15 @@
 //   return config;
 // });
 
-
 // export default instance;
-
 
 import axios from "axios";
 
 const instance = axios.create({
-  // Pārbaudām, vai lapa ir atvērta lokāli vai internetā
+  // Atgriežamies pie vienkāršības, kas strādāja
   baseURL: window.location.hostname === "localhost" 
     ? "http://localhost:4444" 
-    : "https://my-blog-backend-qniv.onrender.com", // Šeit vēlāk ierakstīsi Render saiti
-  withCredentials: true,
+    : "https://my-blog-backend-qniv.onrender.com",
 });
 
 instance.interceptors.request.use((config) => {
