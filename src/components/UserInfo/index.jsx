@@ -4,20 +4,19 @@ import Avatar from "@mui/material/Avatar";
 import styles from "./UserInfo.module.scss";
 
 export const UserInfo = ({ fullName, avatarUrl, additionalText }) => {
-  // 1. Pārbaudām, vai avatarUrl vispār eksistē un nav kļūdains
+  // 1. Pārbaudām, vai ir īsta bilde
   const hasAvatar =
     avatarUrl &&
     avatarUrl !== "null" &&
     avatarUrl !== "undefined" &&
     avatarUrl !== "";
 
-  // 2. GUDRA SAITE: Ja tā sākas ar "http", izmantojam to pašu.
-  // Ja nē (vecās bildes), pieliekam servera adresi.
+  // 2. Veidojam ceļu tikai tad, ja ir bilde, citādi dodam undefined
   const finalAvatarPath = hasAvatar
     ? avatarUrl.startsWith("http")
       ? avatarUrl
       : `${axios.defaults.baseURL}${avatarUrl}`
-    : "/no-avatar.png";
+    : undefined; // ŠIS IR SVARĪGI INICIĀĻIEM
 
   return (
     <div className={styles.root}>
@@ -25,7 +24,10 @@ export const UserInfo = ({ fullName, avatarUrl, additionalText }) => {
         className={styles.avatar}
         src={finalAvatarPath}
         alt={fullName || "Anonīms autors"}
-      />
+      >
+        {/* 3. Ja bildes nav (src ir undefined), rādīs šo burtu: */}
+        {fullName ? fullName[0].toUpperCase() : "A"}
+      </Avatar>
       <div className={styles.userDetails}>
         <span className={styles.userName}>{fullName || "Anonīms autors"}</span>
         <span className={styles.additional}>{additionalText}</span>
