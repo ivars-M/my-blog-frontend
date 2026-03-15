@@ -15,43 +15,43 @@ export const Home = () => {
   const dispatch = useDispatch();
 
   const userData = useSelector((state) => state.auth.data);
-  const { posts, tags } = useSelector((state) => state.posts);
+  const { posts, tags, searchQuery } = useSelector((state) => state.posts); // searchQuery paņemam šeit
 
   const isPostsLoading = posts.status === "loading";
   const isTagsLoading = tags.status === "loading";
-  const { searchQuery } = useSelector((state) => state.posts);
   const [tabIndex, setTabIndex] = React.useState(0);
 
-  // VIENS UN VIENĪGAIS useEffect rakstiem un tagiem
   React.useEffect(() => {
-    dispatch(fetchPosts(name)); // 'name' nāks no useParams
+    dispatch(fetchPosts(name));
     dispatch(fetchTags());
-  }, [name, dispatch]); // Tiklīdz mainās tags URL, mēs pārlādējam
+  }, [name, dispatch]);
 
-  // DROŠA kārtošana: pievienojam pārbaudi, vai items vispār ir masīvs
+  // FILTRĒŠANA UN KĀRTOŠANA
   const sortedPosts = React.useMemo(() => {
     if (!posts.items || !Array.isArray(posts.items)) return [];
-    const filteredPosts = posts.items.filter((obj) =>
-      obj.title.toLowerCase().includes(searchQuery.toLowerCase()),
+
+    // 1. Filtrējam pēc meklētāja (izmantojam searchQuery no Redux)
+    const filtered = posts.items.filter((obj) =>
+      obj.title.toLowerCase().includes((searchQuery || "").toLowerCase()),
     );
 
-    return [...filteredPosts].sort((a, b) => {
-      return tabIndex === 0
-        ? new Date(b.createdAt) - new Date(a.createdAt)
-        : b.viewsCount - a.viewsCount;
+    // 2. Kārtojam nofiltrētos rezultātus
+    return [...filtered].sort((a, b) => {
+      if (tabIndex === 0) {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+      return b.viewsCount - a.viewsCount;
     });
-  }, [posts.items, tabIndex, searchQuery]);
+  }, [posts.items, tabIndex, searchQuery]); // Pārliecinies, ka searchQuery ir šeit!
 
-  // Komentāru ielāde (atstājam kā bija)
   const [latestComments, setLatestComments] = React.useState([]);
   React.useEffect(() => {
     axios
       .get("/comments")
       .then((res) => setLatestComments(res.data))
       .catch((err) => console.warn(err));
-  }, []); // Ielādējam tikai vienreiz palaižot lapu
+  }, []);
 
-  console.log("Pašreizējie raksti:", posts.items);
   return (
     <>
       {name && <h2 style={{ marginBottom: 20 }}>Raksti ar tagu: #{name}</h2>}
@@ -66,13 +66,12 @@ export const Home = () => {
 
       <Grid container spacing={4}>
         <Grid item xs={12} md={8}>
-          {/* <Grid xs={8} item> */}
           {(isPostsLoading ? [...Array(5)] : sortedPosts).map((obj, index) =>
             isPostsLoading ? (
               <Post key={index} isLoading={true} />
             ) : (
               <Post
-                key={index}
+                key={obj._id} // Izmantojam unikālo ID, nevis index
                 id={obj._id}
                 title={obj.title}
                 imageUrl={obj.imageUrl || ""}
@@ -82,37 +81,34 @@ export const Home = () => {
                 viewsCount={obj.viewsCount}
                 commentsCount={obj.commentsCount}
                 tags={obj.tags}
-                isEditable={
-                  userData?._id &&
-                  obj.user?._id &&
-                  userData._id === obj.user._id
-                }
+                isEditable={userData?._id === obj.user?._id}
               />
             ),
           )}
+          {/* Ja nekas nav atrasts pēc filtrēšanas */}
+          {!isPostsLoading && sortedPosts.length === 0 && (
+            <div style={{ textAlign: "center", marginTop: 50 }}>
+              <h3>Nekas netika atrasts...</h3>
+            </div>
+          )}
         </Grid>
 
-        {/* <Grid xs={4} item> */}
         <Grid item xs={12} md={4}>
           <TagsBlock items={tags.items} isLoading={isTagsLoading} />
           <CommentsBlock
             items={latestComments}
             isLoading={false}
-            currentUserId={userData?._id} // Tagad React zinās, kurš ir "savējais"
+            currentUserId={userData?._id}
             onDelete={(id) => {
               if (window.confirm("Vai tiešām vēlies dzēst komentāru?")) {
                 axios
                   .delete(`/comments/${id}`)
                   .then(() => {
-                    // Atjaunojam sarakstu lokāli, lai komentārs pazustu uzreiz
                     setLatestComments((prev) =>
                       prev.filter((obj) => obj._id !== id),
                     );
                   })
-                  .catch((err) => {
-                    console.warn(err);
-                    alert("Neizdevās izdzēst komentāru");
-                  });
+                  .catch((err) => console.warn(err));
               }
             }}
           />
