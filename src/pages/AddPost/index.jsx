@@ -168,7 +168,12 @@ export const AddPost = () => {
       />
 
       <div className={styles.buttons}>
-        <Button onClick={onSubmit} size="large" variant="contained">
+        <Button
+          disabled={isLoading}
+          onClick={onSubmit}
+          size="large"
+          variant="contained"
+        >
           {isEditing ? "Saglabāt" : "Publicēt"}
         </Button>
         <a href="/">
