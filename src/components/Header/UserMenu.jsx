@@ -8,18 +8,24 @@ import {
   Divider,
   Box,
 } from "@mui/material";
+// Importējam tavu jauno axios instanci
+import axios from "../../axios"; 
 
 const UserMenu = ({ user, onDeleteProfile, onLogout }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
 
-  // 1. GUDRAIS URL: Ja bildes nav, obligāti atgriežam undefined
+  // 1. GUDRAIS URL: Izmantojam axios.defaults.baseURL, lai nebūtu ar roku jāraksta adreses
   const avatarUrl = user?.avatarUrl;
-  const finalAvatarUrl = avatarUrl
-    ? avatarUrl.startsWith("http")
+  
+  // Pārbaudām, vai ir bilde un vai tā nav tukša stringa/null
+  const hasAvatar = avatarUrl && avatarUrl !== "null" && avatarUrl !== "";
+
+  const finalAvatarUrl = hasAvatar
+    ? (avatarUrl.startsWith("http")
       ? avatarUrl
-      : `https://my-blog-backend-qniv.onrender.com${avatarUrl}`
-    : undefined;
+      : `${axios.defaults.baseURL}${avatarUrl}`)
+    : undefined; // OBLIGĀTI undefined, lai MUI rādītu burtu
 
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -38,14 +44,15 @@ const UserMenu = ({ user, onDeleteProfile, onLogout }) => {
           height: 40,
           marginRight: 1,
           cursor: "pointer",
-          // Ja ir bilde, fons caurspīdīgs, ja nav - smuks pelēks iniciālim
+          // Ja ir bilde, fons caurspīdīgs, ja nav - smuks zils fons iniciālim
           backgroundColor: finalAvatarUrl ? "transparent" : "#1976d2",
           color: "#fff",
           fontWeight: 600,
+          border: "1px solid rgba(0,0,0,0.1)"
         }}
         onClick={handleOpen}
       >
-        {/* Šis parādīsies tikai tad, ja finalAvatarUrl ir undefined */}
+        {/* Šis burts parādīsies TIKAI tad, ja finalAvatarUrl būs undefined */}
         {user?.fullName ? user.fullName[0].toUpperCase() : "U"}
       </Avatar>
 
