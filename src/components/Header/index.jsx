@@ -9,6 +9,7 @@ import Skeleton from "@mui/material/Skeleton";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
+import { Avatar } from "@mui/material";
 
 import axios from "../../axios.js";
 import UserMenu from "./UserMenu";
@@ -90,7 +91,10 @@ export const Header = () => {
               ) : isAuth ? (
                 // Ja ir ielogojies, bet dati vēl lādējas
                 <Skeleton variant="circular" width={40} height={40} />
-              ) : null}
+              ) : (
+                /* ŠIS PARĀDĪSIES, KAD BŪSI IZLOGOJIES */
+                <Avatar sx={{ width: 40, height: 40, bgcolor: "#e5e5e5" }} />
+              )}
             </div>
 
             {isAuth ? (
