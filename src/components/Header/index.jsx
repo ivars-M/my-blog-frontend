@@ -1,40 +1,77 @@
 import React from "react";
-import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
-import axios from "../../axios.js";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectIsAuth } from "../../redux/slices/auth";
-import Skeleton from "@mui/material/Skeleton";
-// import Avatar from "@mui/material/Avatar";
 
-import styles from "./Header.module.scss";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
+import Skeleton from "@mui/material/Skeleton";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import SearchIcon from "@mui/icons-material/Search";
+
+import axios from "../../axios.js";
 import UserMenu from "./UserMenu";
+import styles from "./Header.module.scss";
 
 export const Header = () => {
   const dispatch = useDispatch();
   const isAuth = useSelector(selectIsAuth);
   const user = useSelector((state) => state.auth.data);
 
+  // Šis būs vajadzīgs meklētājam vēlāk (Home lapā)
+  const [searchValue, setSearchValue] = React.useState("");
+
   const onClickLogout = () => {
-    if (window.confirm("Tiešām gribat iziet?")) dispatch(logout());
-    window.localStorage.removeItem("token");
+    if (window.confirm("Tiešām gribat iziet?")) {
+      dispatch(logout());
+      window.localStorage.removeItem("token");
+    }
   };
-  
 
   return (
     <div className={styles.root}>
       <Container maxWidth="lg">
         <div className={styles.inner}>
-          <Link className={styles.logo} to="/">
-            <div>Sākums</div>
-          </Link>
+          {/* KREISĀ PUSE: Logo un Meklētājs */}
+          <div
+            className={styles.leftSide}
+            style={{ display: "flex", alignItems: "center", gap: "20px" }}
+          >
+            <Link className={styles.logo} to="/">
+              <div style={{ fontWeight: "bold", fontSize: "20px" }}>SĀKUMS</div>
+            </Link>
 
-          {/* Labā puse */}
-          <div className={styles.inner}>
-            {/* Avatar vieta vienmēr pastāv */}
+            {/* JAUNAIS MEKLĒTĀJS */}
+            <TextField
+              size="small"
+              placeholder="Meklēt rakstus..."
+              variant="outlined"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon size="small" />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                backgroundColor: "#f5f5f5",
+                borderRadius: "5px",
+                width: "250px",
+              }}
+            />
+          </div>
+
+          {/* LABĀ PUSE: Avatars un Pogas */}
+          <div
+            className={styles.buttons}
+            style={{ display: "flex", alignItems: "center", gap: "15px" }}
+          >
             <div className={styles.avatarWrapper}>
-              {isAuth ? (
+              {/* Tikai ja ielogojies UN dati ir atnākuši, rādām UserMenu */}
+              {isAuth && user ? (
                 <UserMenu
                   user={user}
                   onDeleteProfile={() => {
@@ -50,35 +87,35 @@ export const Header = () => {
                     window.location.reload();
                   }}
                 />
-              ) : (
+              ) : isAuth ? (
+                // Ja ir ielogojies, bet dati vēl lādējas
                 <Skeleton variant="circular" width={40} height={40} />
-              )}
+              ) : null}
             </div>
-            <div className={styles.buttons}>
-              {isAuth ? (
-                <>
-                  <Link to="/add-post">
-                    <Button variant="contained">Rakstīt postu</Button>
-                  </Link>
-                  <Button
-                    onClick={onClickLogout}
-                    variant="contained"
-                    color="error"
-                  >
-                    Iziet
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Link to="/login" className={styles.loginBtn}>
-                    <Button variant="outlined">Ieeja</Button>
-                  </Link>
-                  <Link to="/register" className={styles.registerBtn}>
-                    <Button variant="contained">Izveidot profilu</Button>
-                  </Link>
-                </>
-              )}
-            </div>
+
+            {isAuth ? (
+              <>
+                <Link to="/add-post">
+                  <Button variant="contained">Rakstīt postu</Button>
+                </Link>
+                <Button
+                  onClick={onClickLogout}
+                  variant="contained"
+                  color="error"
+                >
+                  Iziet
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link to="/login">
+                  <Button variant="outlined">Ieeja</Button>
+                </Link>
+                <Link to="/register">
+                  <Button variant="contained">Izveidot profilu</Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </Container>
