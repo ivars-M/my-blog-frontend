@@ -18,6 +18,13 @@ export const fetchRemovePost = createAsyncThunk(
     await axios.delete(`/posts/${id}`);
   },
 );
+export const fetchPostsByUserId = createAsyncThunk(
+  "posts/fetchPostsByUserId",
+  async (id) => {
+    const { data } = await axios.get(`/posts/user/${id}`);
+    return data;
+  },
+);
 
 const initialState = {
   posts: {
@@ -69,6 +76,20 @@ const postsSlice = createSlice({
     [fetchRemovePost.fulfilled]: (state, action) => {
       const id = action.meta.arg;
       state.posts.items = state.posts.items.filter((obj) => obj._id !== id);
+    },
+
+    //rakstu iegūšana pēc lietotāja ID
+    [fetchPostsByUserId.pending]: (state) => {
+      state.posts.items = [];
+      state.posts.status = "loading";
+    },
+    [fetchPostsByUserId.fulfilled]: (state, action) => {
+      state.posts.items = action.payload;
+      state.posts.status = "loaded";
+    },
+    [fetchPostsByUserId.rejected]: (state) => {
+      state.posts.items = [];
+      state.posts.status = "error";
     },
   },
 });

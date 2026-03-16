@@ -106,6 +106,7 @@ export const Post = ({
         <div className={styles.indention}>
           {/* UserInfo tagad saņem jau apstrādātu avataru */}
           <UserInfo
+            _id={user?._id}
             fullName={user?.fullName || "Anonīms autors"}
             avatarUrl={finalAvatarUrl}
             additionalText={formatDate(createdAt)}

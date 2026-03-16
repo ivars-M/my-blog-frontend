@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+
 import {
   Avatar,
   Menu,
@@ -19,11 +20,12 @@ const UserMenu = ({ user, onDeleteProfile, onLogout }) => {
   const hasAvatar = avatarUrl && avatarUrl !== "null" && avatarUrl !== "";
 
   // Ja bilde met kļūdu vai tās nav, rādām iniciāļus
-  const finalAvatarUrl = (hasAvatar && !imgError)
-    ? (avatarUrl.startsWith("http")
-      ? avatarUrl
-      : `${axios.defaults.baseURL}${avatarUrl}`)
-    : undefined;
+  const finalAvatarUrl =
+    hasAvatar && !imgError
+      ? avatarUrl.startsWith("http")
+        ? avatarUrl
+        : `${axios.defaults.baseURL}${avatarUrl}`
+      : undefined;
 
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);

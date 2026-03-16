@@ -6,7 +6,14 @@ import { Header } from "./components";
 // import { TagPage } from "./pages/TagPage";
 import { ProfileEdit } from "./pages/ProfileEdit";
 
-import { Home, FullPost, Registration, AddPost, Login } from "./pages";
+import {
+  Home,
+  UserPosts,
+  FullPost,
+  Registration,
+  AddPost,
+  Login,
+} from "./pages";
 import React from "react";
 import { fetchAuthMe } from "./redux/slices/auth";
 
@@ -30,6 +37,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/profile/edit" element={<ProfileEdit />} />
           <Route path="/register" element={<Registration />} />
+          <Route path="/user/:id" element={<UserPosts />} />
           {/* <Route path="/tags/:tag" element={<TagPage />} /> */}
         </Routes>
       </Container>
