@@ -108,23 +108,7 @@ export const CommentsBlock = ({
                         },
                       }}
                     />
-                    {/* ... (dzēšanas poga paliek tāda pati) */}
                   </ListItem>
-
-                  {!isLoading && currentUserId === obj.user?._id && (
-                    <IconButton
-                      onClick={(e) => {
-                        e.preventDefault(); // Svarīgi: lai neaizietu uz linku!
-                        onDelete(obj._id);
-                      }}
-                      sx={{
-                        color: "rgba(0, 0, 0, 0.4)",
-                        "&:hover": { color: "red" },
-                      }}
-                    >
-                      <ClearIcon />
-                    </IconButton>
-                  )}
                 </Link>
               )}
               <Divider
