@@ -81,7 +81,7 @@ export const Home = () => {
               <Post key={index} isLoading={true} />
             ) : (
               <Post
-                key={obj._id} // Izmantojam unikālo ID, nevis index
+                key={obj._id}
                 id={obj._id}
                 title={obj.title}
                 imageUrl={obj.imageUrl || ""}
@@ -91,7 +91,9 @@ export const Home = () => {
                 viewsCount={obj.viewsCount}
                 commentsCount={obj.commentsCount}
                 tags={obj.tags}
-                isEditable={userData?._id === obj.user?._id}
+                isEditable={
+                  Boolean(userData?._id) && userData?._id === obj.user?._id
+                }
               />
             ),
           )}
