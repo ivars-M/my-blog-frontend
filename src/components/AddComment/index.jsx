@@ -31,10 +31,9 @@ export const Index = ({ postId, onAdd }) => {
       // Skaidrs paziņojums lietotājam
       if (err.response?.status === 403 || err.response?.status === 401) {
         alert("Komentēt var tikai reģistrēti lietotāji!");
+      } else {
+        alert("Neizdevās pievienot komentāru. Mēģiniet vēlreiz!");
       }
-      // else {
-      //   alert("Neizdevās pievienot komentāru. Mēģiniet vēlreiz!");
-      // }
     } finally {
       setIsLoading(false);
     }
