@@ -92,7 +92,9 @@ export const Home = () => {
                 commentsCount={obj.commentsCount}
                 tags={obj.tags}
                 isEditable={
-                  Boolean(userData?._id) && userData?._id === obj.user?._id
+                  Boolean(userData?._id) &&
+                  Boolean(obj.user?._id) &&
+                  userData._id === obj.user._id
                 }
               />
             ),
