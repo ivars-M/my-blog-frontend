@@ -43,8 +43,6 @@ export const AddPost = () => {
     setText(value);
   }, []);
 
-  const [isLoading, setIsLoading] = React.useState(false); // Pievieno šo, ja nav!
-
   const onSubmit = async () => {
     try {
       setIsLoading(true);
