@@ -46,6 +46,10 @@ export const UsersBlock = ({ items, isLoading = true }) => {
                 <ListItemText primary={obj.fullName} secondary={obj.email} />
               )}
             </ListItem>
+            {index !== (isLoading ? 4 : items.length - 1) && (
+              <Divider variant="inset" component="li" />
+            )}
+
             <Divider variant="inset" component="li" />
           </React.Fragment>
         ))}
