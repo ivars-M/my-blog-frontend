@@ -23,6 +23,8 @@ export const Index = ({ postId, onAdd }) => {
         postId,
       });
 
+     
+
       setText("");
       if (onAdd) onAdd(data);
     } catch (err) {
