@@ -8,3 +8,20 @@ body {
 html {
   overflow-y: scroll;
 }
+/* Stilīgs skrollbārs visiem sarakstiem */
+ul::-webkit-scrollbar {
+  width: 6px;
+}
+
+ul::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+ul::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+ul::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
