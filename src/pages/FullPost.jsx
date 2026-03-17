@@ -1,6 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom"; // Pievienoju Link
 import axios from "../axios";
 import { Post } from "../components/Post";
 import ReactMarkdown from "react-markdown";
@@ -16,14 +15,14 @@ export const FullPost = () => {
   const navigate = useNavigate();
   const posts = useSelector((state) => state.posts.posts.items);
 
+  const { id } = useParams();
+
   const handleDeleteComment = async (commentId) => {
     try {
       const token = window.localStorage.getItem("token");
-
       await axios.delete(`/comments/${commentId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
       setComments((prev) => prev.filter((c) => c._id !== commentId));
     } catch (err) {
       console.warn(err);
@@ -31,9 +30,6 @@ export const FullPost = () => {
     }
   };
 
-  const { id } = useParams();
-
-  // Ielādējam pašu rakstu
   React.useEffect(() => {
     axios
       .get(`/posts/${id}`)
@@ -47,25 +43,27 @@ export const FullPost = () => {
       });
   }, [id]);
 
-  // Ielādējam komentārus
   React.useEffect(() => {
     axios
       .get(`/comments/post/${id}`)
       .then((res) => setComments(res.data))
       .catch((err) => console.warn(err));
   }, [id]);
+
   React.useEffect(() => {
     const exists = posts.find((p) => p._id === id);
-    if (!exists) {
+    if (!exists && !isLoading) {
       navigate("/");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [posts, id]);
+  }, [posts, id, isLoading, navigate]);
 
-  // Pievienot jaunu komentāru
   const handleAddComment = async () => {
     try {
       const token = window.localStorage.getItem("token");
+      if (!token) {
+        alert("Komentēt var tikai reģistrēti lietotāji!");
+        return;
+      }
 
       await axios.post(
         "/comments",
@@ -73,13 +71,16 @@ export const FullPost = () => {
         { headers: { Authorization: `Bearer ${token}` } },
       );
 
-      // Pārlādējam komentārus no DB
-      axios.get(`/comments/post/${id}`).then((res) => setComments(res.data));
-
+      const res = await axios.get(`/comments/post/${id}`);
+      setComments(res.data);
       setCommentText("");
     } catch (err) {
       console.warn(err);
-      alert("Neizdevās pievienot komentāru");
+      if (err.response?.status === 403 || err.response?.status === 401) {
+        alert("Komentēt var tikai reģistrēti lietotāji!");
+      } else {
+        alert("Neizdevās pievienot komentāru");
+      }
     }
   };
 
@@ -104,11 +105,10 @@ export const FullPost = () => {
       >
         <ReactMarkdown>{data.text}</ReactMarkdown>
       </Post>
-      {/* Komentāru sadaļa */}
+
       <div style={{ marginTop: 40 }}>
         <h2>Komentāri ({comments.length})</h2>
 
-        {/* Komentāru saraksts */}
         <CommentsBlock
           items={comments}
           isLoading={false}
@@ -116,45 +116,74 @@ export const FullPost = () => {
           onDelete={handleDeleteComment}
         />
 
-        {/* IEVADES LOGS UN POGA - Tagad tie ir brīvi un redzami! */}
-        <div
-          style={{
-            marginTop: 20,
-            padding: "20px",
-            border: "1px solid #eee",
-            background: "#fff",
-          }}
-        >
-          <textarea
-            value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
-            placeholder="Raksti komentāru..."
-            rows={3}
+        {/* --- IZLABOTĀ DAĻA: PĀRBAUDE VAI LIETOTĀJS IR IELOGOJIES --- */}
+        {!userData ? (
+          <div
             style={{
-              width: "100%",
-              padding: 10,
-              borderRadius: "5px",
-              border: "1px solid #ccc",
-            }}
-          />
-          <button
-            onClick={handleAddComment}
-            style={{
-              marginTop: 10,
-              padding: "10px 20px",
-              background: "#1976d2",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-              borderRadius: "5px",
-              fontWeight: "bold",
+              marginTop: 20,
+              padding: "20px",
+              border: "1px dashed #ccc",
+              borderRadius: "10px",
+              textAlign: "center",
+              background: "#f9f9f9",
             }}
           >
-            Pievienot komentāru
-          </button>
-        </div>
-      </div>{" "}
-      {/* Šis </div> noslēdz marginTop: 40 bloku */}
+            <p style={{ marginBottom: 10 }}>
+              Tikai reģistrēti lietotāji var pievienot komentārus.
+            </p>
+            <Link
+              to="/login"
+              style={{
+                color: "#1976d2",
+                fontWeight: "bold",
+                textDecoration: "none",
+              }}
+            >
+              Ielogoties
+            </Link>
+          </div>
+        ) : (
+          <div
+            style={{
+              marginTop: 20,
+              padding: "20px",
+              border: "1px solid #eee",
+              background: "#fff",
+              borderRadius: "10px",
+            }}
+          >
+            <textarea
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+              placeholder="Raksti komentāru..."
+              rows={3}
+              style={{
+                width: "100%",
+                padding: 10,
+                borderRadius: "5px",
+                border: "1px solid #ccc",
+                fontFamily: "inherit",
+              }}
+            />
+            <button
+              onClick={handleAddComment}
+              disabled={!commentText.trim()}
+              style={{
+                marginTop: 10,
+                padding: "10px 20px",
+                background: commentText.trim() ? "#1976d2" : "#ccc",
+                color: "white",
+                border: "none",
+                cursor: commentText.trim() ? "pointer" : "default",
+                borderRadius: "5px",
+                fontWeight: "bold",
+              }}
+            >
+              Pievienot komentāru
+            </button>
+          </div>
+        )}
+      </div>
     </>
   );
 };
