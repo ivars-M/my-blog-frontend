@@ -47,16 +47,21 @@ export const AddPost = () => {
     try {
       setIsLoading(true);
 
-      // Svarīgi: Pārvēršam tagus par stringu, ja tie ir masīvs
-      // Jo serveris parasti gaida "tag1,tag2", lai pēc tam tos sadalītu
-      const formattedTags = Array.isArray(tags) ? tags.join(",") : tags;
+      // 1. Pārliecināmies, ka tagi ir masīvs un tajā nav tukšu atstarpju
+      // Ja 'tags' ir string "lacis, koks", tas kļūs par ["lacis", "koks"]
+      const tagsArray =
+        typeof tags === "string"
+          ? tags.split(",").map((tag) => tag.trim())
+          : tags;
 
       const fields = {
-        title,
+        title, // Pārliecinies, ka šeit ir vismaz 5 simboli
+        text, // Pārliecinies, ka šeit ir vismaz 10 simboli
         imageUrl,
-        tags: formattedTags,
-        text,
+        tags: tagsArray,
       };
+
+      console.log("SŪTĀM ŠOS DATUS:", fields);
 
       const { data } = isEditing
         ? await axios.patch(`/posts/${id}`, fields)
@@ -65,13 +70,16 @@ export const AddPost = () => {
       const _id = isEditing ? id : data._id;
       navigate(`/posts/${_id}`);
     } catch (err) {
-      console.warn(err);
-      alert("Neizdevās izveidot rakstu!");
+      console.warn("PILNA KĻŪDA:", err);
+      // Ja Response logs ir tukšs, mēģinām izvilkt kļūdu no Axios objekta
+      if (err.response && err.response.data) {
+        console.log("SERVERA ZIŅOJUMS:", err.response.data);
+      }
+      alert("Neizdevās izveidot rakstu. Pārbaudi konsoli!");
     } finally {
-      setIsLoading(false); // Šeit arī jābūt false beigās
+      setIsLoading(false);
     }
   };
-
   // const onSubmit = async () => {
   //   try {
   //     setLoading(true);
