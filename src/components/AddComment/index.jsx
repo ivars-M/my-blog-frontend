@@ -1,16 +1,16 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import axios from "../../axios";
 import styles from "./AddComment.module.scss";
 
 import TextField from "@mui/material/TextField";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom"; // Pievieno šo
 
 export const Index = ({ postId, onAdd }) => {
   const [text, setText] = React.useState("");
-  const [isLoading, setIsLoading] = React.useState(false); // Pievienojam loading stāvokli
+  const [isLoading, setIsLoading] = React.useState(false);
   const user = useSelector((state) => state.auth.data);
 
   const handleSubmit = async () => {
@@ -24,16 +24,10 @@ export const Index = ({ postId, onAdd }) => {
       });
 
       setText("");
-
       if (onAdd) onAdd(data);
     } catch (err) {
-      console.error("Kļūda pievienojot komentāru:", err);
-
-      // 1. Pārbaudām statusa kodu
-      const status = err.response?.status;
-
-      // 2. Ja statuss ir 401/403 VAI ja vispār nav lietotāja datu Redux/State
-      if (status === 403 || status === 401 || !user) {
+      console.warn(err);
+      if (err.response?.status === 403 || err.response?.status === 401) {
         alert("Komentēt var tikai reģistrēti lietotāji!");
       } else {
         alert("Neizdevās pievienot komentāru. Mēģiniet vēlreiz!");
@@ -43,7 +37,7 @@ export const Index = ({ postId, onAdd }) => {
     }
   };
 
-  // JA LIETOTĀJS NAV IELOGOJIES
+  // --- TAVA IZMAIŅA: JA LIETOTĀJS NAV IELOGOJIES ---
   if (!user) {
     return (
       <div
@@ -53,17 +47,27 @@ export const Index = ({ postId, onAdd }) => {
           border: "1px dashed #ccc",
           borderRadius: "10px",
           textAlign: "center",
+          marginBottom: "20px", // Pievienoju mazliet atstarpi apakšā
         }}
       >
-        <p>Tikai reģistrēti lietotāji var pievienot komentārus.</p>
-        <Link to="/login" style={{ color: "#1976d2", fontWeight: "bold" }}>
+        <p style={{ margin: "0 0 10px 0" }}>
+          Tikai reģistrēti lietotāji var pievienot komentārus.
+        </p>
+        <Link
+          to="/login"
+          style={{
+            color: "#1976d2",
+            fontWeight: "bold",
+            textDecoration: "none",
+          }}
+        >
           Ielogoties
         </Link>
       </div>
     );
   }
 
-  // JA IR IELOGOJIES
+  // --- JA LIETOTĀJS IR IELOGOJIES ---
   return (
     <div className={styles.root}>
       <Avatar
@@ -76,7 +80,6 @@ export const Index = ({ postId, onAdd }) => {
             : "/no-avatar.png"
         }
       />
-
       <div className={styles.form}>
         <TextField
           label="Uzrakstīt komentāru"
@@ -85,14 +88,13 @@ export const Index = ({ postId, onAdd }) => {
           multiline
           fullWidth
           value={text}
-          disabled={isLoading} // Neļaujam rakstīt, kamēr sūta
+          disabled={isLoading}
           onChange={(e) => setText(e.target.value)}
         />
-
         <Button
           variant="contained"
           onClick={handleSubmit}
-          disabled={isLoading || !text.trim()} // Bloķējam pogu, ja sūta vai teksts tukšs
+          disabled={isLoading || !text.trim()}
         >
           {isLoading ? "Sūta..." : "Nosūtīt"}
         </Button>
