@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Pārliecinies, ka izmanto Link no react-router-dom
+import { Link } from "react-router-dom";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -7,9 +7,15 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import TagIcon from "@mui/icons-material/Tag";
 import ListItemText from "@mui/material/ListItemText";
 import Skeleton from "@mui/material/Skeleton";
+import Button from "@mui/material/Button"; // Pievieno šo
 import { SideBlock } from "./SideBlock";
 
 export const TagsBlock = ({ items, isLoading = true }) => {
+  const [showAll, setShowAll] = React.useState(false);
+
+  // Ja ielādējas, rādām skeletonus, ja nē - filtrējam pēc showAll
+  const visibleTags = showAll ? items : items.slice(0, 7);
+
   return (
     <SideBlock title="Tags">
       <List
@@ -20,8 +26,7 @@ export const TagsBlock = ({ items, isLoading = true }) => {
           padding: "10px",
         }}
       >
-        {(isLoading ? [...Array(9)] : items).map((name, i) => (
-          /* IZMAIŅA: Izmantojam komponenti 'component={Link}' tieši ListItemButton */
+        {(isLoading ? [...Array(9)] : visibleTags).map((name, i) => (
           <ListItem key={i} disablePadding sx={{ width: "auto" }}>
             {isLoading ? (
               <ListItemButton disabled>
@@ -50,6 +55,20 @@ export const TagsBlock = ({ items, isLoading = true }) => {
           </ListItem>
         ))}
       </List>
+
+      {/* POGA "RĀDĪT VAIRĀK / MAZĀK" */}
+      {!isLoading && items.length > 7 && (
+        <div style={{ padding: "0 10px 10px 10px" }}>
+          <Button
+            onClick={() => setShowAll(!showAll)}
+            size="small"
+            fullWidth
+            sx={{ fontSize: "12px", textTransform: "none" }}
+          >
+            {showAll ? "Rādīt mazāk" : `Rādīt visus (${items.length})`}
+          </Button>
+        </div>
+      )}
     </SideBlock>
   );
 };

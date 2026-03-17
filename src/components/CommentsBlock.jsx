@@ -2,9 +2,6 @@ import React from "react";
 import axios from "../axios";
 import { Link } from "react-router-dom";
 
-// import IconButton from "@mui/material/IconButton";
-// import ClearIcon from "@mui/icons-material/Clear";
-
 import { SideBlock } from "./SideBlock";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -14,25 +11,26 @@ import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import Skeleton from "@mui/material/Skeleton";
 
-export const CommentsBlock = ({
-  items,
-  children,
-  isLoading = true,
-  currentUserId,
-  onDelete,
-}) => {
-  const [showAll, setShowAll] = React.useState(false);
-
+export const CommentsBlock = ({ items, children, isLoading = true }) => {
   const sortedComments = [...items].sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
   );
 
-  const visibleComments = showAll ? sortedComments : sortedComments.slice(0, 5);
-
   return (
     <SideBlock title="Komentāri">
-      <List sx={{ padding: 0 }}>
-        {(isLoading ? [...Array(5)] : visibleComments).map((obj, index) => {
+      <List
+        sx={{
+          padding: 0,
+          maxHeight: "400px", // Te tu vari regulēt, cik garu gribi to logu
+          overflowY: "auto", // Ieslēdz skrollbāru
+          "&::-webkit-scrollbar": { width: "5px" }, // Uztaisa smuku, tievu skrollbāru
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#ccc",
+            borderRadius: "10px",
+          },
+        }}
+      >
+        {(isLoading ? [...Array(5)] : sortedComments).map((obj, index) => {
           const safeUser =
             obj?.user &&
             typeof obj.user === "object" &&
@@ -40,7 +38,6 @@ export const CommentsBlock = ({
               ? obj.user
               : { fullName: "Anonīms lietotājs", avatarUrl: null };
 
-          // --- IZLABOTĀ GUDRA LOĢIKA ---
           const avatarUrl = safeUser.avatarUrl;
           const isFullUrl = avatarUrl?.startsWith("http");
 
@@ -57,7 +54,6 @@ export const CommentsBlock = ({
           return (
             <React.Fragment key={index}>
               {isLoading ? (
-                // ... (Skeleton daļa paliek nemainīga)
                 <ListItem alignItems="flex-start" sx={{ padding: "8px 10px" }}>
                   <ListItemAvatar sx={{ minWidth: 45 }}>
                     <Skeleton variant="circular" width={30} height={30} />
@@ -110,38 +106,20 @@ export const CommentsBlock = ({
                   </ListItem>
                 </Link>
               )}
-              {index < (isLoading ? 4 : visibleComments.length - 1) && (
+              {index < (isLoading ? 4 : sortedComments.length - 1) && (
                 <Divider
                   variant="inset"
                   component="li"
                   sx={{ marginLeft: "50px" }}
                 />
               )}
-
-            
             </React.Fragment>
           );
         })}
       </List>
 
-      {/* Poga "Rādīt vairāk / mazāk" */}
       {!isLoading && items.length > 5 && (
-        <div style={{ padding: "0 10px 10px 10px", textAlign: "center" }}>
-          <button
-            onClick={() => setShowAll(!showAll)}
-            style={{
-              background: "none",
-              border: "none",
-              color: "#1976d2",
-              cursor: "pointer",
-              fontSize: "13px",
-              fontWeight: 600,
-              padding: "5px 10px",
-            }}
-          >
-            {showAll ? "Rādīt mazāk" : `Rādīt visus (${items.length})`}
-          </button>
-        </div>
+        <div style={{ padding: "0 10px 10px 10px", textAlign: "center" }}></div>
       )}
 
       {children}
