@@ -27,9 +27,7 @@ export const CommentsBlock = ({
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
   );
 
-  const visibleComments = showAll
-    ? sortedComments
-    : sortedComments.slice(0, 10);
+  const visibleComments = showAll ? sortedComments : sortedComments.slice(0, 5);
 
   return (
     <SideBlock title="Komentāri">
@@ -140,7 +138,7 @@ export const CommentsBlock = ({
       </List>
 
       {/* Poga "Rādīt vairāk / mazāk" */}
-      {!isLoading && items.length > 10 && (
+      {!isLoading && items.length > 5 && (
         <div style={{ padding: "0 10px 10px 10px", textAlign: "center" }}>
           <button
             onClick={() => setShowAll(!showAll)}
