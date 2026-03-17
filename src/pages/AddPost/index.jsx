@@ -61,8 +61,6 @@ export const AddPost = () => {
         tags: tagsArray,
       };
 
-      console.log("SŪTĀM ŠOS DATUS:", fields);
-
       const { data } = isEditing
         ? await axios.patch(`/posts/${id}`, fields)
         : await axios.post("/posts", fields);
@@ -70,12 +68,13 @@ export const AddPost = () => {
       const _id = isEditing ? id : data._id;
       navigate(`/posts/${_id}`);
     } catch (err) {
-      console.warn("PILNA KĻŪDA:", err);
-      // Ja Response logs ir tukšs, mēģinām izvilkt kļūdu no Axios objekta
-      if (err.response && err.response.data) {
-        console.log("SERVERA ZIŅOJUMS:", err.response.data);
+      console.warn(err);
+      // Pārbaudām kļūdas statusu: 403 parasti nozīmē "Forbidden" (nav tokena)
+      if (err.response?.status === 403 || err.response?.status === 401) {
+        alert("Rakstus var pievienot tikai reģistrēti lietotāji!");
+      } else {
+        alert("Neizdevās izveidot rakstu. Pārbaudi datus!");
       }
-      alert("Neizdevās izveidot rakstu. Pārbaudi konsoli!");
     } finally {
       setIsLoading(false);
     }

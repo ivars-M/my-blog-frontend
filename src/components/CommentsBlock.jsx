@@ -53,7 +53,6 @@ export const CommentsBlock = ({
                 ? avatarUrl
                 : `${axios.defaults.baseURL}${avatarUrl}`
               : "/no-avatar.png";
-          // ----------------------------
 
           return (
             <React.Fragment key={index}>
@@ -111,11 +110,15 @@ export const CommentsBlock = ({
                   </ListItem>
                 </Link>
               )}
-              <Divider
-                variant="inset"
-                component="li"
-                sx={{ marginLeft: "50px" }}
-              />
+              {index < (isLoading ? 4 : visibleComments.length - 1) && (
+                <Divider
+                  variant="inset"
+                  component="li"
+                  sx={{ marginLeft: "50px" }}
+                />
+              )}
+
+            
             </React.Fragment>
           );
         })}
