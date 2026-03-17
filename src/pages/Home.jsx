@@ -4,57 +4,37 @@ import { useDispatch, useSelector } from "react-redux";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Grid from "@mui/material/Grid";
+
 import { fetchPosts, fetchTags } from "../redux/slices/posts.js";
 import axios from "../axios";
+
 import { Post } from "../components/Post";
 import { TagsBlock } from "../components/TagsBlock";
 import { CommentsBlock } from "../components/CommentsBlock";
+import { UsersBlock } from "../components/UsersBlock";
 
 export const Home = () => {
   const { name } = useParams();
   const dispatch = useDispatch();
 
   const userData = useSelector((state) => state.auth.data);
-  const { posts, tags, searchQuery } = useSelector((state) => state.posts); // searchQuery paņemam šeit
+  const { posts, tags, searchQuery } = useSelector((state) => state.posts);
+
+  const [tabIndex, setTabIndex] = React.useState(0);
+  const [latestComments, setLatestComments] = React.useState([]);
+  const [users, setUsers] = React.useState([]); // Jauns stāvoklis lietotājiem
+  const [isUsersLoading, setUsersLoading] = React.useState(true);
 
   const isPostsLoading = posts.status === "loading";
   const isTagsLoading = tags.status === "loading";
-  const [tabIndex, setTabIndex] = React.useState(0);
 
+  // 1. Ielādējam rakstus un tagus
   React.useEffect(() => {
     dispatch(fetchPosts(name));
     dispatch(fetchTags());
   }, [name, dispatch]);
 
-  // FILTRĒŠANA UN KĀRTOŠANA
-  const sortedPosts = React.useMemo(() => {
-    if (!posts.items || !Array.isArray(posts.items)) return [];
-
-    const query = searchQuery.toLowerCase();
-
-    const filtered = posts.items.filter((obj) => {
-      // 1. Meklējam virsrakstā
-      const inTitle = obj.title.toLowerCase().includes(query);
-
-      // 2. Meklējam tagos (droša pārbaude)
-      const inTags =
-        obj.tags && Array.isArray(obj.tags)
-          ? obj.tags.some((tag) => tag.toLowerCase().includes(query))
-          : false;
-
-      return inTitle || inTags;
-    });
-
-    // 2. Kārtojam nofiltrētos rezultātus
-    return [...filtered].sort((a, b) => {
-      if (tabIndex === 0) {
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      }
-      return b.viewsCount - a.viewsCount;
-    });
-  }, [posts.items, tabIndex, searchQuery]); // Pārliecinies, ka searchQuery ir šeit!
-
-  const [latestComments, setLatestComments] = React.useState([]);
+  // 2. Ielādējam pēdējos komentārus
   React.useEffect(() => {
     axios
       .get("/comments")
@@ -62,9 +42,48 @@ export const Home = () => {
       .catch((err) => console.warn(err));
   }, []);
 
+  // 3. Ielādējam lietotājus sānjoslai
+  React.useEffect(() => {
+    setUsersLoading(true);
+    axios
+      .get("/users")
+      .then((res) => {
+        setUsers(res.data);
+        setUsersLoading(false);
+      })
+      .catch((err) => {
+        console.warn(err);
+        setUsersLoading(false);
+      });
+  }, []);
+
+  // FILTRĒŠANA UN KĀRTOŠANA
+  const sortedPosts = React.useMemo(() => {
+    if (!posts.items || !Array.isArray(posts.items)) return [];
+
+    const query = searchQuery ? searchQuery.toLowerCase() : "";
+
+    const filtered = posts.items.filter((obj) => {
+      const inTitle = obj.title.toLowerCase().includes(query);
+      const inTags =
+        obj.tags && Array.isArray(obj.tags)
+          ? obj.tags.some((tag) => tag.toLowerCase().includes(query))
+          : false;
+      return inTitle || inTags;
+    });
+
+    return [...filtered].sort((a, b) => {
+      if (tabIndex === 0) {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+      return b.viewsCount - a.viewsCount;
+    });
+  }, [posts.items, tabIndex, searchQuery]);
+
   return (
     <>
       {name && <h2 style={{ marginBottom: 20 }}>Raksti ar tagu: #{name}</h2>}
+
       <Tabs
         style={{ marginBottom: 15 }}
         value={tabIndex}
@@ -84,22 +103,24 @@ export const Home = () => {
                 key={obj._id}
                 id={obj._id}
                 title={obj.title}
-                imageUrl={obj.imageUrl || ""}
+                imageUrl={
+                  obj.imageUrl
+                    ? obj.imageUrl.startsWith("http")
+                      ? obj.imageUrl
+                      : `http://localhost:4444${obj.imageUrl}`
+                    : ""
+                }
                 isFullPost={false}
                 user={obj.user}
                 createdAt={obj.createdAt}
                 viewsCount={obj.viewsCount}
-                commentsCount={obj.commentsCount}
+                commentsCount={obj.commentsCount || 0}
                 tags={obj.tags}
-                isEditable={
-                  Boolean(userData?._id) &&
-                  Boolean(obj.user?._id) &&
-                  userData._id === obj.user._id
-                }
+                isEditable={userData?._id === obj.user?._id}
               />
             ),
           )}
-          {/* Ja nekas nav atrasts pēc filtrēšanas */}
+
           {!isPostsLoading && sortedPosts.length === 0 && (
             <div style={{ textAlign: "center", marginTop: 50 }}>
               <h3>Nekas netika atrasts...</h3>
@@ -108,18 +129,22 @@ export const Home = () => {
         </Grid>
 
         <Grid item xs={12} md={4}>
+          {/* Sānjoslas secība: Tagi -> Lietotāji -> Komentāri */}
           <TagsBlock items={tags.items} isLoading={isTagsLoading} />
+
+          <UsersBlock items={users} isLoading={isUsersLoading} />
+
           <CommentsBlock
             items={latestComments}
             isLoading={false}
             currentUserId={userData?._id}
-            onDelete={(id) => {
+            onDelete={(commentId) => {
               if (window.confirm("Vai tiešām vēlies dzēst komentāru?")) {
                 axios
-                  .delete(`/comments/${id}`)
+                  .delete(`/comments/${commentId}`)
                   .then(() => {
                     setLatestComments((prev) =>
-                      prev.filter((obj) => obj._id !== id),
+                      prev.filter((obj) => obj._id !== commentId),
                     );
                   })
                   .catch((err) => console.warn(err));
