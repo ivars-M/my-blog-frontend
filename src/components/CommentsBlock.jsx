@@ -138,7 +138,28 @@ export const CommentsBlock = ({
           );
         })}
       </List>
-      {/* ... (poga "Rādīt mazāk" un children) */}
+
+      {/* Poga "Rādīt vairāk / mazāk" */}
+      {!isLoading && items.length > 10 && (
+        <div style={{ padding: "0 10px 10px 10px", textAlign: "center" }}>
+          <button
+            onClick={() => setShowAll(!showAll)}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#1976d2",
+              cursor: "pointer",
+              fontSize: "13px",
+              fontWeight: 600,
+              padding: "5px 10px",
+            }}
+          >
+            {showAll ? "Rādīt mazāk" : `Rādīt visus (${items.length})`}
+          </button>
+        </div>
+      )}
+
+      {children}
     </SideBlock>
   );
 };
