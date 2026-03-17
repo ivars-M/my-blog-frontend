@@ -27,9 +27,13 @@ export const Index = ({ postId, onAdd }) => {
 
       if (onAdd) onAdd(data);
     } catch (err) {
-      console.warn(err);
-      // Skaidrs paziņojums lietotājam
-      if (err.response?.status === 403 || err.response?.status === 401) {
+      console.error("Kļūda pievienojot komentāru:", err);
+
+      // 1. Pārbaudām statusa kodu
+      const status = err.response?.status;
+
+      // 2. Ja statuss ir 401/403 VAI ja vispār nav lietotāja datu Redux/State
+      if (status === 403 || status === 401 || !user) {
         alert("Komentēt var tikai reģistrēti lietotāji!");
       } else {
         alert("Neizdevās pievienot komentāru. Mēģiniet vēlreiz!");
