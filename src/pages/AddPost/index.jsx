@@ -14,7 +14,7 @@ export const AddPost = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isAuth = useSelector(selectIsAuth);
-  const [isLoading, setLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
   const [text, setText] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [tags, setTags] = React.useState("");
@@ -43,34 +43,65 @@ export const AddPost = () => {
     setText(value);
   }, []);
 
+  const [isLoading, setIsLoading] = React.useState(false); // Pievieno šo, ja nav!
+
   const onSubmit = async () => {
     try {
-      setLoading(true);
+      setIsLoading(true);
+
+      // Svarīgi: Pārvēršam tagus par stringu, ja tie ir masīvs
+      // Jo serveris parasti gaida "tag1,tag2", lai pēc tam tos sadalītu
+      const formattedTags = Array.isArray(tags) ? tags.join(",") : tags;
 
       const fields = {
         title,
-        imageUrl: imageUrl,
-        tags:
-          typeof tags === "string"
-            ? tags.split(",").map((tag) => tag.trim())
-            : tags,
+        imageUrl,
+        tags: formattedTags,
         text,
       };
-      console.log("FIELDS:", fields);
 
       const { data } = isEditing
         ? await axios.patch(`/posts/${id}`, fields)
         : await axios.post("/posts", fields);
 
       const _id = isEditing ? id : data._id;
-
       navigate(`/posts/${_id}`);
     } catch (err) {
-      console.log("ERROR:", err.response?.data);
       console.warn(err);
-      alert("Kļūda izveidojot ierakstu");
+      alert("Neizdevās izveidot rakstu!");
+    } finally {
+      setIsLoading(false); // Šeit arī jābūt false beigās
     }
   };
+
+  // const onSubmit = async () => {
+  //   try {
+  //     setLoading(true);
+
+  //     const fields = {
+  //       title,
+  //       imageUrl: imageUrl,
+  //       tags:
+  //         typeof tags === "string"
+  //           ? tags.split(",").map((tag) => tag.trim())
+  //           : tags,
+  //       text,
+  //     };
+  //     console.log("FIELDS:", fields);
+
+  //     const { data } = isEditing
+  //       ? await axios.patch(`/posts/${id}`, fields)
+  //       : await axios.post("/posts", fields);
+
+  //     const _id = isEditing ? id : data._id;
+
+  //     navigate(`/posts/${_id}`);
+  //   } catch (err) {
+  //     console.log("ERROR:", err.response?.data);
+  //     console.warn(err);
+  //     alert("Kļūda izveidojot ierakstu");
+  //   }
+  // };
   React.useEffect(() => {
     console.log("EDIT ID:", id);
 
