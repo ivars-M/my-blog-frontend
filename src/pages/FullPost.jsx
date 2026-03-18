@@ -106,10 +106,10 @@ export const FullPost = () => {
         <ReactMarkdown>{data.text}</ReactMarkdown>
       </Post>
 
-     
+      <div style={{ marginTop: 40 }}>
+        <h2>Komentāri ({comments.length})</h2>
 
-        <div style={{ marginTop: 40 }}>
-          <h2>Komentāri ({comments.length})</h2>
+        
 
           {/* VECAIS LABAIS MAP VARIANTS */}
           <div
@@ -181,7 +181,7 @@ export const FullPost = () => {
 
           {/* Šeit paliek tava esošā textarea un pievienošanas poga */}
           {/* ... (tavs iepriekšējais kods ar textarea) ... */}
-        </div>
+        
 
         {/* --- IZLABOTĀ DAĻA: PĀRBAUDE VAI LIETOTĀJS IR IELOGOJIES --- */}
         {!userData ? (
