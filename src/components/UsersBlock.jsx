@@ -10,7 +10,7 @@ import Skeleton from "@mui/material/Skeleton";
 
 export const UsersBlock = ({ items, isLoading = true }) => {
   return (
-    <SideBlock title="Jaunie biedri">
+    <SideBlock title="Reģistrētie lietotāji">
       <List
         style={{
           maxHeight: "300px", // Ierobežojam augstumu
