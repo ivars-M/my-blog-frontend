@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom"; // Pievienoju L
 import axios from "../axios";
 import { Post } from "../components/Post";
 import ReactMarkdown from "react-markdown";
-import { CommentsBlock } from "../components/CommentsBlock";
+// import { CommentsBlock } from "../components/CommentsBlock";
 import { useSelector } from "react-redux";
 
 export const FullPost = () => {
@@ -109,12 +109,80 @@ export const FullPost = () => {
       <div style={{ marginTop: 40 }}>
         <h2>Komentāri ({comments.length})</h2>
 
-        <CommentsBlock
-          items={comments}
-          isLoading={false}
-          currentUserId={userData?._id}
-          onDelete={handleDeleteComment}
-        />
+        <div style={{ marginTop: 40 }}>
+          <h2>Komentāri ({comments.length})</h2>
+
+          {/* VECAIS LABAIS MAP VARIANTS */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "15px",
+              marginTop: "20px",
+            }}
+          >
+            {comments.map((obj) => (
+              <div
+                key={obj._id}
+                style={{
+                  display: "flex",
+                  gap: "15px",
+                  padding: "15px",
+                  borderBottom: "1px solid #eee",
+                  position: "relative", // Nepieciešams, lai poga "peldētu" malā
+                }}
+              >
+                <img
+                  src={obj.user.avatarUrl || "/noavatar.png"}
+                  alt={obj.user.fullName}
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                  }}
+                />
+                <div style={{ flex: 1 }}>
+                  <b style={{ fontSize: "14px" }}>{obj.user.fullName}</b>
+                  <p
+                    style={{
+                      margin: "5px 0 0",
+                      fontSize: "15px",
+                      color: "#333",
+                    }}
+                  >
+                    {obj.text}
+                  </p>
+                </div>
+
+                {/* DZĒŠANAS POGA - parādās tikai Stārķim (autoram) */}
+                {userData?._id === obj.user._id && (
+                  <button
+                    onClick={() => handleDeleteComment(obj._id)}
+                    style={{
+                      position: "absolute",
+                      right: "10px",
+                      top: "10px",
+                      background: "none",
+                      border: "none",
+                      color: "#ff4d4f",
+                      cursor: "pointer",
+                      fontSize: "18px",
+                      fontWeight: "bold",
+                      opacity: 0.6,
+                    }}
+                    title="Dzēst komentāru"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Šeit paliek tava esošā textarea un pievienošanas poga */}
+          {/* ... (tavs iepriekšējais kods ar textarea) ... */}
+        </div>
 
         {/* --- IZLABOTĀ DAĻA: PĀRBAUDE VAI LIETOTĀJS IR IELOGOJIES --- */}
         {!userData ? (
