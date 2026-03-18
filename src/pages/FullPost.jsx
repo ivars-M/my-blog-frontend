@@ -106,8 +106,7 @@ export const FullPost = () => {
         <ReactMarkdown>{data.text}</ReactMarkdown>
       </Post>
 
-      <div style={{ marginTop: 40 }}>
-        <h2>Komentāri ({comments.length})</h2>
+     
 
         <div style={{ marginTop: 40 }}>
           <h2>Komentāri ({comments.length})</h2>
