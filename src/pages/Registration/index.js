@@ -38,8 +38,6 @@ export const Registration = () => {
       const { data } = await axios.post("/upload/avatar", formData);
 
       setAvatarUrl(data.url);
-
-      // saglabājam URL
     } catch (err) {
       console.warn(err);
       alert("Neizdevās augšupielādēt attēlu");
@@ -49,7 +47,7 @@ export const Registration = () => {
   const {
     register,
     handleSubmit,
-    // setError,
+
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
@@ -62,10 +60,13 @@ export const Registration = () => {
 
   const onSubmit = async (values) => {
     const data = await dispatch(fetchRegister({ ...values, avatarUrl }));
-
-    if (!data.payload) {
-      return alert("Neizdevās reģistrēties!");
+    if (fetchRegister.rejected.match(data)) {
+      // Tagad result.payload saturēs to tekstu no rejectWithValue!
+      return alert(data.payload || "Neizdevās reģistrēties!");
     }
+    // if (!data.payload) {
+    //   return alert("Neizdevās reģistrēties!");
+    // }
 
     if ("token" in data.payload) {
       window.localStorage.setItem("token", data.payload.token);

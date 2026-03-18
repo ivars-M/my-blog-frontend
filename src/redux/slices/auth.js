@@ -10,11 +10,20 @@ export const fetchAuth = createAsyncThunk("auth/fetchAuth", async (params) => {
 });
 
 export const fetchRegister = createAsyncThunk(
-  "auth/fetchRegister",
-  async (params) => {
-    const { data } = await axios.post("/auth/register", params);
-    return data;
-  },
+  'auth/fetchRegister',
+  async (params, { rejectWithValue }) => { // Pievienojam rejectWithValue šeit
+    try {
+      const { data } = await axios.post('/auth/register', params);
+      return data;
+    } catch (err) {
+      // Šī ir tā maģiskā rindiņa! 
+      // Tā paņem ziņu no Backend (UserController) un aizsūta uz React
+      if (!err.response) {
+        throw err;
+      }
+      return rejectWithValue(err.response.data.message);
+    }
+  }
 );
 
 export const fetchAuthMe = createAsyncThunk("auth/fetchAuthMe", async () => {
