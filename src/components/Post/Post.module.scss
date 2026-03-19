@@ -42,13 +42,17 @@ $blue: #4361ee;
 
   // 3. Mobilā versija - lai nekas nelēkā
   @media (max-width: 600px) {
-    flex-direction: row;
+    flex-direction: column; // Raksta saturs ies uz leju
 
     .editButtons {
+      position: relative; // SVARĪGI: Noņem lidošanu pa virsu
+      display: flex;
+      justify-content: flex-end; // Nobīda pogas pa labi
       opacity: 1;
       pointer-events: auto;
-      right: 5px;
-      top: 5px;
+      right: 0; // Atceļam iepriekšējos 5px
+      top: 0;
+      margin-bottom: 10px; // Atstarpe, lai nepieglaužas tekstam
     }
   }
 
@@ -77,7 +81,8 @@ $blue: #4361ee;
 
   @media (max-width: 600px) {
     width: 120px; /* Ievērojami mazāks platums telefonā */
-    height: 120px; /* Padarām to par mazu kvadrātiņu */
+    height: 120px;
+    max-height: 350px; /* Padarām to par mazu kvadrātiņu */
     object-fit: contain; /* Iekļaujam visu bildi (neapgriežam galvu!) */
     background-color: #f9f9f9; /* Viegls fons, ja bilde neaizpilda kvadrātu */
     margin: 15px; /* Atstarpe no malām */
@@ -87,11 +92,13 @@ $blue: #4361ee;
 }
 
 .imageFull {
-  width: auto; /* Tavs vēlamais izmērs */
-  height: 600px; /* Nekas netiek apgriezts */
+  width: 100%; /* Bilde mēģinās aizpildīt platumu... */
+  max-width: 100%; /* ...bet nekad neies pāri savam rāmim (konteineram) */
+  height: auto; /* Augstums pielāgosies proporcionāli platumam */
+  max-height: 600px; /* Šis ir tavs limits – bilde nebūs garāka par šo */
   display: block;
-  margin: 0 auto 20px; /* Centrējam */
-  object-fit: contain;
+  margin: 0 auto 20px;
+  object-fit: contain; /* Saglabā visu bildi redzamu, neko neapgriežot */
   border-radius: 10px;
 }
 

@@ -13,11 +13,13 @@
 }
 
 .image {
-  width: auto; /* Tavs vēlamais izmērs */
-  height: 500px; /* Nekas netiek apgriezts */
+  width: 100%; /* Bilde aizņems visu pieejamo vietu... */
+  max-width: 100%; /* ...bet nekad neies pāri rāmim */
+  height: auto; /* Augstums pielāgosies proporcionāli */
+  max-height: 500px; /* Bet neļausim tai būt garākai par 500px */
   display: block;
-  margin: 0 auto 20px; /* Centrējam */
-  object-fit: contain;
+  margin: 0 auto 20px;
+  object-fit: contain; /* Saglabā bildi veselu, neko neapgriežot */
   border-radius: 10px;
 }
 
@@ -50,4 +52,3 @@
 .post-title {
   background-color: blue($color: #2725b1);
 }
-  
