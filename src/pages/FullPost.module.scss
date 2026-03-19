@@ -1,0 +1,139 @@
+$blue: #1976d2;
+$red: #ff4d4f;
+
+.commentsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.commentItem {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  position: relative;
+  transition: background-color 0.2s ease;
+  border-radius: 8px;
+
+  &:hover {
+    background-color: #f9f9f9;
+
+    .editControls {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .commentBody {
+    flex: 1;
+    
+    b {
+      font-size: 14px;
+    }
+    
+    p {
+      margin: 5px 0 0;
+      font-size: 15px;
+      color: #333;
+    }
+  }
+
+  .editControls {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
+
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      transition: transform 0.1s ease;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    .editBtn {
+      color: $blue;
+      font-size: 16px;
+    }
+
+    .deleteBtn {
+      color: $red;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  }
+}
+
+.authPrompt {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px dashed #ccc;
+  border-radius: 10px;
+  text-align: center;
+  background: #f9f9f9;
+
+  a {
+    color: $blue;
+    font-weight: bold;
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+  }
+}
+
+.addCommentBlock {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #eee;
+  background: #fff;
+  border-radius: 10px;
+
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    resize: vertical;
+  }
+
+  .submitBtn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.2s ease;
+    
+    &:enabled {
+      background: $blue;
+      cursor: pointer;
+    }
+    &:disabled {
+      background: #ccc;
+      cursor: default;
+    }
+  }
+}
