@@ -65,7 +65,11 @@ export const Header = () => {
               sx={{
                 backgroundColor: "#f5f5f5",
                 borderRadius: "5px",
-                width: "250px",
+                width: { xs: "150px", sm: "250px" }, // xs (telefons) būs 150px, sm (dators) būs 250px
+                transition: "width 0.3s", // Smukam efektam
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { border: "none" }, // Ja gribi modernāku izskatu bez rāmja
+                },
               }}
             />
           </div>

@@ -30,10 +30,18 @@
 .editor {
   margin: 30px -30px;
 
+  @media (max-width: 600px) {
+    margin: 15px 0; // Telefonā noņemam mīnusa malas, lai neizietu no rāmja
+  }
+
   :global {
     .CodeMirror {
       min-height: 150px;
-      max-height: 300px; // Šis ierobežos lielo logu
+      max-height: 300px;
+
+      @media (max-width: 600px) {
+        max-height: 200px; // Telefonā padarām logu īsāku, lai redzētu pogas apakšā
+      }
     }
     .editor-toolbar {
       border: 0;
@@ -44,11 +52,15 @@
 
 .buttons {
   display: flex;
+  padding-bottom: 30px; // Iedodam "gaisu" apakšā, lai skrollējot var aizsniegt pogas
 
-  button {
-    margin-right: 15px;
+  @media (max-width: 600px) {
+    flex-direction: column; // Telefonā pogas viena zem otras
+    gap: 10px; // Atstarpe starp pogām
+
+    button {
+      margin-right: 0; // Noņemam sānu atstarpi
+      width: 100%; // Pogas pa visu platumu - vieglāk uzspiest ar pirkstu
+    }
   }
-}
-.post-title {
-  background-color: blue($color: #2725b1);
 }
