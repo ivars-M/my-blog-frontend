@@ -51,7 +51,7 @@ export const Header = () => {
             {/* JAUNAIS MEKLĒTĀJS */}
             <TextField
               size="small"
-              placeholder="Meklēt ..."
+              placeholder="Meklēt..."
               variant="outlined"
               value={searchQuery}
               onChange={onChangeSearch}
