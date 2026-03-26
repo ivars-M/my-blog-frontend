@@ -193,7 +193,7 @@ export const AddPost = () => {
         onChange={(e) => setTags(e.target.value)}
         classes={{ root: styles.tags }}
         variant="standard"
-        placeholder="Tags "
+        placeholder="Tagi "
         fullWidth
       />
       <SimpleMDE

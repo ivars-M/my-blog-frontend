@@ -46,7 +46,7 @@ export const Login = () => {
   return (
     <Paper classes={{ root: styles.root }}>
       <Typography classes={{ root: styles.title }} variant="h5">
-        Ieeja kontā
+        Ieeja
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextField

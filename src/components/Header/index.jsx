@@ -109,7 +109,7 @@ export const Header = () => {
             {isAuth ? (
               <>
                 <Link to="/add-post">
-                  <Button variant="contained">Rakstīt postu</Button>
+                  <Button variant="contained">Izveidot rakstu</Button>
                 </Link>
                 <Button
                   onClick={onClickLogout}
@@ -125,7 +125,7 @@ export const Header = () => {
                   <Button variant="outlined">Ieeja</Button>
                 </Link>
                 <Link to="/register">
-                  <Button variant="contained">Izveidot profilu</Button>
+                  <Button variant="contained">Reģistrēties</Button>
                 </Link>
               </>
             )}

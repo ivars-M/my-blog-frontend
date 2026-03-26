@@ -1,3 +1,10 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  height: 100%; // Jānodrošina, ka konteiners aizņem visu augstumu
+  overflow: hidden; // Drošībai, lai nebūtu divkāršā skrollēšana
+}
+
 .title {
   input {
     font-size: 42px;
@@ -37,10 +44,10 @@
   :global {
     .CodeMirror {
       min-height: 150px;
-      max-height: 300px;
+      max-height: 2000px;
 
       @media (max-width: 600px) {
-        max-height: 200px; // Telefonā padarām logu īsāku, lai redzētu pogas apakšā
+        max-height: 1500px; // Telefonā padarām logu īsāku, lai redzētu pogas apakšā
       }
     }
     .editor-toolbar {
@@ -52,10 +59,10 @@
 
 .buttons {
   display: flex;
-  padding-bottom: 30px; // Iedodam "gaisu" apakšā, lai skrollējot var aizsniegt pogas
+  padding-bottom: 5px; // Iedodam "gaisu" apakšā, lai skrollējot var aizsniegt pogas
 
   @media (max-width: 600px) {
-    flex-direction: column; // Telefonā pogas viena zem otras
+    flex-direction: row; // Telefonā pogas viena zem otras
     gap: 10px; // Atstarpe starp pogām
 
     button {

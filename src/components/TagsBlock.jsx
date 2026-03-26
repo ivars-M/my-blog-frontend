@@ -17,7 +17,7 @@ export const TagsBlock = ({ items, isLoading = true }) => {
   const visibleTags = showAll ? items : items.slice(0, 7);
 
   return (
-    <SideBlock title="Tags">
+    <SideBlock title="Tagi">
       <List
         sx={{
           display: "flex",

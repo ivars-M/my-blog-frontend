@@ -23,8 +23,6 @@ export const Index = ({ postId, onAdd }) => {
         postId,
       });
 
-     
-
       setText("");
       if (onAdd) onAdd(data);
     } catch (err) {
@@ -84,7 +82,7 @@ export const Index = ({ postId, onAdd }) => {
       />
       <div className={styles.form}>
         <TextField
-          label="Uzrakstīt komentāru"
+          label="Rakstīt komentāru"
           variant="outlined"
           maxRows={10}
           multiline

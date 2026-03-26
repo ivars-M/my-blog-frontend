@@ -70,8 +70,9 @@ $blue: #4361ee;
 // Tālāk turpini ar .imageSmall utt.
 
 .imageSmall {
-  margin-top: 3%;
-  margin-bottom: 3px;
+  margin-top: 2%;
+  margin-left: 2%;
+  margin-bottom: 2%;
   width: 20%; /* Fiksēts platums mazajai bildei */
   height: auto; /* Fiksēts augstums */
   border-radius: 6px;
@@ -98,6 +99,7 @@ $blue: #4361ee;
   max-height: 600px; /* Šis ir tavs limits – bilde nebūs garāka par šo */
   display: block;
   margin: 0 auto 20px;
+  padding-top: 20px; /* Atstarpe no augšas, lai nekarātos pie autora informācijas */
   object-fit: contain; /* Saglabā visu bildi redzamu, neko neapgriežot */
   border-radius: 10px;
 }
