@@ -11,7 +11,7 @@ import axios from "../axios";
 import { Post } from "../components/Post";
 import { TagsBlock } from "../components/TagsBlock";
 import { CommentsBlock } from "../components/CommentsBlock";
-import { UsersBlock } from "../components/UsersBlock";
+// import { UsersBlock } from "../components/UsersBlock";
 
 export const Home = () => {
   const { name } = useParams();
@@ -22,8 +22,6 @@ export const Home = () => {
 
   const [tabIndex, setTabIndex] = React.useState(0);
   const [latestComments, setLatestComments] = React.useState([]);
-  const [users, setUsers] = React.useState([]); // Jauns stāvoklis lietotājiem
-  const [isUsersLoading, setUsersLoading] = React.useState(true);
 
   const isPostsLoading = posts.status === "loading";
   const isTagsLoading = tags.status === "loading";
@@ -40,21 +38,6 @@ export const Home = () => {
       .get("/comments")
       .then((res) => setLatestComments(res.data))
       .catch((err) => console.warn(err));
-  }, []);
-
-  // 3. Ielādējam lietotājus sānjoslai
-  React.useEffect(() => {
-    setUsersLoading(true);
-    axios
-      .get("/users")
-      .then((res) => {
-        setUsers(res.data);
-        setUsersLoading(false);
-      })
-      .catch((err) => {
-        console.warn(err);
-        setUsersLoading(false);
-      });
   }, []);
 
   // FILTRĒŠANA UN KĀRTOŠANA
@@ -132,7 +115,7 @@ export const Home = () => {
           {/* Sānjoslas secība: Tagi -> Lietotāji -> Komentāri */}
           <TagsBlock items={tags.items} isLoading={isTagsLoading} />
 
-          <UsersBlock items={users} isLoading={isUsersLoading} />
+          {/* <UsersBlock items={users} isLoading={isUsersLoading} /> */}
 
           <CommentsBlock
             items={latestComments}

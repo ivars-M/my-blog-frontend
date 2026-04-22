@@ -1,10 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Container from "@mui/material/Container";
-
-import { Header } from "./components";
-// import { TagPage } from "./pages/TagPage";
+import { Header, UsersBlock } from "./components";
 import { ProfileEdit } from "./pages/ProfileEdit";
+import Gallery from "./components/Gallery";
 
 import {
   Home,
@@ -16,7 +15,15 @@ import {
 } from "./pages";
 import React from "react";
 import { fetchAuthMe } from "./redux/slices/auth";
-
+console.log("Komponentes:", {
+  Home,
+  FullPost,
+  Login,
+  Header,
+  Gallery,
+  UsersBlock,
+  ProfileEdit,
+});
 function App() {
   const dispatch = useDispatch();
 
@@ -38,7 +45,8 @@ function App() {
           <Route path="/profile/edit" element={<ProfileEdit />} />
           <Route path="/register" element={<Registration />} />
           <Route path="/user/:id" element={<UserPosts />} />
-          {/* <Route path="/tags/:tag" element={<TagPage />} /> */}
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/UsersBlock" element={<UsersBlock />} />
         </Routes>
       </Container>
     </>

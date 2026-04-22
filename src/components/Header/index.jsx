@@ -22,8 +22,6 @@ export const Header = () => {
   const isAuth = useSelector(selectIsAuth);
   const user = useSelector((state) => state.auth.data);
 
-  // Šis būs vajadzīgs meklētājam vēlāk (Home lapā)
-  // const [searchValue, setSearchValue] = React.useState("");
   const onChangeSearch = (e) => {
     dispatch(setSearchQuery(e.target.value));
   };
@@ -48,7 +46,6 @@ export const Header = () => {
               <div style={{ fontWeight: "bold", fontSize: "20px" }}>SĀKUMS</div>
             </Link>
 
-            {/* JAUNAIS MEKLĒTĀJS */}
             <TextField
               size="small"
               placeholder="Meklēt..."
@@ -65,13 +62,23 @@ export const Header = () => {
               sx={{
                 backgroundColor: "#f5f5f5",
                 borderRadius: "5px",
-                width: { xs: "150px", sm: "250px" }, // xs (telefons) būs 150px, sm (dators) būs 250px
-                transition: "width 0.3s", // Smukam efektam
+                width: { xs: "150px", sm: "250px" },
+                transition: "width 0.3s",
                 "& .MuiOutlinedInput-root": {
-                  "& fieldset": { border: "none" }, // Ja gribi modernāku izskatu bez rāmja
+                  "& fieldset": { border: "none" },
                 },
               }}
             />
+            {isAuth ? (
+              <>
+                <Link to="/usersblock">
+                  <Button variant="outlined">Lietotāju saraksts</Button>
+                </Link>
+                <Link to="/gallery">
+                  <Button variant="outlined">Galerija</Button>
+                </Link>
+              </>
+            ) : null}
           </div>
 
           {/* LABĀ PUSE: Avatars un Pogas */}
@@ -80,7 +87,6 @@ export const Header = () => {
             style={{ display: "flex", alignItems: "center", gap: "15px" }}
           >
             <div className={styles.avatarWrapper}>
-              {/* Tikai ja ielogojies UN dati ir atnākuši, rādām UserMenu */}
               {isAuth && user ? (
                 <UserMenu
                   user={user}
@@ -98,16 +104,20 @@ export const Header = () => {
                   }}
                 />
               ) : isAuth ? (
-                // Ja ir ielogojies, bet dati vēl lādējas
                 <Skeleton variant="circular" width={40} height={40} />
               ) : (
-                /* ŠIS PARĀDĪSIES, KAD BŪSI IZLOGOJIES */
                 <Avatar sx={{ width: 40, height: 40, bgcolor: "#e5e5e5" }} />
               )}
             </div>
 
             {isAuth ? (
               <>
+                {/* <Link to="/usersblock">
+                  <Button variant="outlined">Reģistrētie lietotāji</Button>
+                </Link>
+                <Link to="/gallery">
+                  <Button variant="outlined">Galerija</Button>
+                </Link> */}
                 <Link to="/add-post">
                   <Button variant="contained">Izveidot rakstu</Button>
                 </Link>
