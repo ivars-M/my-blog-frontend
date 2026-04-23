@@ -1,10 +1,56 @@
 .root {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 0px;
-  max-width: 45%;
+  margin-bottom: 20px;
+
+  // ŠIS IR GALVENAIS LABOJUMS:
+  width: fit-content; // Logs pielāgosies satura platumam
+  min-width: 280px; // Bet nebūs par šauru
+  max-width: 450px; // Un nebūs par platu uz lieliem ekrāniem
+
+  background-color: #fff; // Pārliecinies, ka fons ir redzams, ja SideBlock to nenodrošina
+  border-radius: 8px;
+
+  // Uz mobilajiem ekrāniem (telefoniem)
+  @media (max-width: 600px) {
+    width: 100%; // Telefonā aizņem visu platumu
+    max-width: none;
+    margin-bottom: 10px;
+  }
 }
 
-.title {
-  padding: 15px 15px 0 15px;
+.list {
+  padding: 0;
+  max-height: 400px;
+  overflow-y: auto;
+
+  // Smuks skrollbārs
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 10px;
+  }
+}
+
+.userItem {
+  transition: background-color 0.2s ease;
+  white-space: nowrap; // Neļauj tekstam pārlēkt jaunā rindā, lai logs zinātu īsto platumu
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  @media (max-width: 600px) {
+    padding-left: 10px;
+    padding-right: 10px;
+    white-space: normal; // Telefonā gan ļaujam pārlēkt rindā, ja vārds ir ļoti garš
+  }
+}
+
+.skeletonWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
 }

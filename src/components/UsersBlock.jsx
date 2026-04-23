@@ -7,8 +7,8 @@ import Avatar from "@mui/material/Avatar";
 import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import Skeleton from "@mui/material/Skeleton";
-import axios from "../axios"; // Pārliecinies, ka ceļš uz tavu axios instanci ir pareizs
-import styles from "./UsersBlock.module.scss"; // IMPORTĒJAM STILUS
+import axios from "../axios";
+import styles from "./UsersBlock.module.scss";
 
 export const UsersBlock = ({
   items: propsItems,
@@ -18,7 +18,6 @@ export const UsersBlock = ({
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    // Ja items netiek padoti caur props (no App.js), ielādējam tos no servera
     if (!propsItems) {
       axios
         .get("/users")
@@ -33,61 +32,50 @@ export const UsersBlock = ({
     }
   }, [propsItems]);
 
-  // Izlemjam, kurus datus rādīt: no props vai no lokālā fetch
   const finalItems = propsItems || users;
   const isDataLoading = propsItems ? propsLoading : loading;
 
   return (
     <div className={styles.root}>
-    <SideBlock title="Lietotāju saraksts">
-      <List
-        sx={{
-          padding: 0,
-          maxHeight: "400px", // Te tu vari regulēt, cik garu gribi to logu
-          overflowY: "auto", // Ieslēdz skrollbāru
-          "&::-webkit-scrollbar": { width: "5px" }, // Uztaisa smuku, tievu skrollbāru
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "#ccc",
-            borderRadius: "10px",
-          },
-        }}
-      >
-        {(isDataLoading ? [...Array(5)] : finalItems).map((obj, index) => (
-          <React.Fragment key={index}>
-            <ListItem alignItems="flex-start">
-              <ListItemAvatar>
+      <SideBlock title="Lietotāju saraksts">
+        <List className={styles.list}>
+          {(isDataLoading ? [...Array(5)] : finalItems).map((obj, index) => (
+            <React.Fragment key={index}>
+              <ListItem alignItems="flex-start" className={styles.userItem}>
+                <ListItemAvatar>
+                  {isDataLoading ? (
+                    <Skeleton variant="circular" width={40} height={40} />
+                  ) : (
+                    <Avatar
+                      alt={obj.fullName}
+                      src={
+                        obj.avatarUrl
+                          ? obj.avatarUrl.startsWith("http")
+                            ? obj.avatarUrl
+                            : `http://localhost:4444${obj.avatarUrl}`
+                          : ""
+                      }
+                    />
+                  )}
+                </ListItemAvatar>
+
                 {isDataLoading ? (
-                  <Skeleton variant="circular" width={40} height={40} />
+                  <div className={styles.skeletonWrapper}>
+                    <Skeleton variant="text" width={120} height={20} />
+                    <Skeleton variant="text" width={160} height={18} />
+                  </div>
                 ) : (
-                  <Avatar
-                    alt={obj.fullName}
-                    src={
-                      obj.avatarUrl
-                        ? obj.avatarUrl.startsWith("http")
-                          ? obj.avatarUrl
-                          : `http://localhost:4444${obj.avatarUrl}`
-                        : ""
-                    }
-                  />
+                  <ListItemText primary={obj.fullName} secondary={obj.email} />
                 )}
-              </ListItemAvatar>
-              {isDataLoading ? (
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <Skeleton variant="text" width={120} height={20} />
-                  <Skeleton variant="text" width={160} height={18} />
-                </div>
-              ) : (
-                <ListItemText primary={obj.fullName} secondary={obj.email} />
+              </ListItem>
+
+              {index !== (isDataLoading ? 4 : finalItems.length - 1) && (
+                <Divider variant="inset" component="li" />
               )}
-            </ListItem>
-            {/* Pievienojam atdalītāju visiem, izņemot pēdējo */}
-            {index !== (isDataLoading ? 4 : finalItems.length - 1) && (
-              <Divider variant="inset" component="li" />
-            )}
-          </React.Fragment>
-        ))}
-      </List>
-    </SideBlock>
+            </React.Fragment>
+          ))}
+        </List>
+      </SideBlock>
     </div>
   );
 };
