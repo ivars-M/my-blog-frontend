@@ -1,35 +1,45 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectIsAuth } from "../../redux/slices/auth";
 import { setSearchQuery } from "../../redux/slices/posts";
 
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import Skeleton from "@mui/material/Skeleton";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
+import {
+  Button,
+  Container,
+  Skeleton,
+  TextField,
+  InputAdornment,
+  // Avatar,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { Avatar } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu"; // Svītriņu ikona
 
-import axios from "../../axios.js";
+// import axios from "../../axios.js";
 import UserMenu from "./UserMenu";
 import styles from "./Header.module.scss";
 
 export const Header = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const searchQuery = useSelector((state) => state.posts.searchQuery);
   const isAuth = useSelector(selectIsAuth);
   const user = useSelector((state) => state.auth.data);
 
-  const onChangeSearch = (e) => {
-    dispatch(setSearchQuery(e.target.value));
-  };
+  const toggleMenu = (open) => () => setMenuOpen(open);
 
-  const onClickLogout = () => {
+  const handleLogout = () => {
     if (window.confirm("Tiešām gribat iziet?")) {
       dispatch(logout());
       window.localStorage.removeItem("token");
+      setMenuOpen(false);
+      navigate("/");
     }
   };
 
@@ -37,95 +47,47 @@ export const Header = () => {
     <div className={styles.root}>
       <Container maxWidth="lg">
         <div className={styles.inner}>
-          {/* KREISĀ PUSE: Logo un Meklētājs */}
-          <div
-            className={styles.leftSide}
-            style={{ display: "flex", alignItems: "center", gap: "20px" }}
-          >
+          {/* KREISĀ PUSE: Vienmēr redzams Logo un Meklētājs */}
+          <div className={styles.leftSide}>
             <Link className={styles.logo} to="/">
-              <div style={{ fontWeight: "bold", fontSize: "20px" }}>SĀKUMS</div>
+              <div className={styles.logoText}>SĀKUMS</div>
             </Link>
 
             <TextField
               size="small"
               placeholder="Meklēt..."
-              variant="outlined"
               value={searchQuery}
-              onChange={onChangeSearch}
+              onChange={(e) => dispatch(setSearchQuery(e.target.value))}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon size="small" />
+                    <SearchIcon fontSize="small" />
                   </InputAdornment>
                 ),
               }}
-              sx={{
-                backgroundColor: "#f5f5f5",
-                borderRadius: "5px",
-                width: { xs: "150px", sm: "250px" },
-                transition: "width 0.3s",
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": { border: "none" },
-                },
-              }}
+              className={styles.searchField}
             />
+          </div>
+
+          {/* LABĀ PUSE: Desktop pogas (paslēptas mobilajā versijā) */}
+          <div className={styles.desktopNav}>
             {isAuth ? (
               <>
                 <Link to="/usersblock">
-                  <Button variant="outlined">Lietotāju saraksts</Button>
+                  <Button variant="text">Lietotāji</Button>
                 </Link>
                 <Link to="/gallery">
-                  <Button variant="outlined">Galerija</Button>
+                  <Button variant="text">Galerija</Button>
                 </Link>
-              </>
-            ) : null}
-          </div>
-
-          {/* LABĀ PUSE: Avatars un Pogas */}
-          <div
-            className={styles.buttons}
-            style={{ display: "flex", alignItems: "center", gap: "15px" }}
-          >
-            <div className={styles.avatarWrapper}>
-              {isAuth && user ? (
-                <UserMenu
-                  user={user}
-                  onDeleteProfile={() => {
-                    if (window.confirm("Vai tiešām dzēst profilu?")) {
-                      axios.delete("/auth/me").then(() => {
-                        window.localStorage.removeItem("token");
-                        window.location.reload();
-                      });
-                    }
-                  }}
-                  onLogout={() => {
-                    window.localStorage.removeItem("token");
-                    window.location.reload();
-                  }}
-                />
-              ) : isAuth ? (
-                <Skeleton variant="circular" width={40} height={40} />
-              ) : (
-                <Avatar sx={{ width: 40, height: 40, bgcolor: "#e5e5e5" }} />
-              )}
-            </div>
-
-            {isAuth ? (
-              <>
-                {/* <Link to="/usersblock">
-                  <Button variant="outlined">Reģistrētie lietotāji</Button>
-                </Link>
-                <Link to="/gallery">
-                  <Button variant="outlined">Galerija</Button>
-                </Link> */}
                 <Link to="/add-post">
                   <Button variant="contained">Izveidot rakstu</Button>
                 </Link>
-                <Button
-                  onClick={onClickLogout}
-                  variant="contained"
-                  color="error"
-                >
+                {user ? (
+                  <UserMenu user={user} onLogout={handleLogout} />
+                ) : (
+                  <Skeleton variant="circular" width={40} height={40} />
+                )}
+                <Button onClick={handleLogout} color="error" variant="outlined">
                   Iziet
                 </Button>
               </>
@@ -140,6 +102,49 @@ export const Header = () => {
               </>
             )}
           </div>
+
+          {/* MOBILĀ IZVĒLNES POGA (parādās tikai telefonā) */}
+          <div className={styles.mobileMenuIcon}>
+            <IconButton onClick={toggleMenu(true)}>
+              <MenuIcon />
+            </IconButton>
+          </div>
+
+          {/* MOBILĀS IZVĒLNES "DRAWER" */}
+          <Drawer anchor="right" open={menuOpen} onClose={toggleMenu(false)}>
+            <div className={styles.drawerList} onClick={toggleMenu(false)}>
+              <List>
+                {isAuth ? (
+                  <>
+                    <ListItem>
+                      <Link to="/usersblock">Lietotāju saraksts</Link>
+                    </ListItem>
+                    <ListItem>
+                      <Link to="/gallery">Galerija</Link>
+                    </ListItem>
+                    <ListItem>
+                      <Link to="/add-post">Izveidot rakstu</Link>
+                    </ListItem>
+                    <ListItem
+                      onClick={handleLogout}
+                      style={{ color: "red", cursor: "pointer" }}
+                    >
+                      Iziet
+                    </ListItem>
+                  </>
+                ) : (
+                  <>
+                    <ListItem>
+                      <Link to="/login">Ieeja</Link>
+                    </ListItem>
+                    <ListItem>
+                      <Link to="/register">Reģistrēties</Link>
+                    </ListItem>
+                  </>
+                )}
+              </List>
+            </div>
+          </Drawer>
         </div>
       </Container>
     </div>
