@@ -21,6 +21,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "../axios";
+import { useSelector } from "react-redux";
 
 const Gallery = () => {
   const [tabValue, setTabValue] = useState(0);
@@ -28,6 +29,7 @@ const Gallery = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const itemsPerPage = 6; // Vari mainīt uz 5, ja vēlies kā iepriekš
+  const { searchQuery } = useSelector((state) => state.posts);
 
   // Stāvokļi augšupielādei un Lightbox
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
@@ -39,6 +41,9 @@ const Gallery = () => {
   useEffect(() => {
     fetchItems();
   }, []);
+  React.useEffect(() => {
+    setPage(1);
+  }, [searchQuery, tabValue]);
 
   const fetchItems = async () => {
     try {
@@ -104,24 +109,39 @@ const Gallery = () => {
   };
 
   // Filtrēšanas loģika paginatoram
-  const getFilteredItems = () => {
-    let filtered = items;
-    if (tabValue === 0)
-      filtered = items.filter((item) => item.type === "image");
-    else if (tabValue === 1)
-      filtered = items.filter((item) => item.type === "video");
+  // 1. Filtrējam visu sarakstu vienreiz, kad kaut kas mainās
+  const allFilteredItems = React.useMemo(() => {
+    let result = items || []; // Izmantojam esošos items vai tukšu masīvu
 
+    // Filtrējam pēc TAB (foto/video)
+    if (tabValue === 0) {
+      result = result.filter((item) => item.type === "image");
+    } else if (tabValue === 1) {
+      result = result.filter((item) => item.type === "video");
+    }
+
+    // Filtrējam pēc meklētāja
+    const query = searchQuery ? searchQuery.toLowerCase().trim() : "";
+    if (query) {
+      result = result.filter(
+        (item) =>
+          item.title?.toLowerCase().includes(query) ||
+          item.description?.toLowerCase().includes(query),
+      );
+    }
+
+    return result;
+  }, [items, tabValue, searchQuery]); // Šeit ESLint vairs nebļaus, jo mēs nedeklarējam 'items' no jauna
+
+  // 2. Funkcija, kas atgriež tikai konkrētās lapas datus renderēšanai
+  const getFilteredItems = () => {
     const start = (page - 1) * itemsPerPage;
-    return filtered.slice(start, start + itemsPerPage);
+    return allFilteredItems.slice(start, start + itemsPerPage);
   };
 
+  // 3. Funkcija lapu skaitam
   const getTotalPages = () => {
-    let filtered = items;
-    if (tabValue === 0)
-      filtered = items.filter((item) => item.type === "image");
-    else if (tabValue === 1)
-      filtered = items.filter((item) => item.type === "video");
-    return Math.ceil(filtered.length / itemsPerPage);
+    return Math.max(1, Math.ceil(allFilteredItems.length / itemsPerPage));
   };
 
   return (
@@ -169,7 +189,9 @@ const Gallery = () => {
       ) : (
         <>
           <Grid container spacing={2}>
-            {getFilteredItems().map((item) => (
+            {getFilteredItems(searchQuery).map((item) => (
+              // Testa nolūkos getFilteredItems sākumā uzraksti:
+              // return items.filter(i => i.title.toLowerCase().includes(searchQuery.toLowerCase()));
               <Grid item xs={12} sm={6} md={4} key={item._id}>
                 <Card
                   sx={{ position: "relative", cursor: "pointer" }}
