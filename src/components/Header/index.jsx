@@ -71,9 +71,6 @@ export const Header = () => {
 
           {/* LABĀ PUSE: Desktop pogas (paslēptas mobilajā versijā) */}
           <div className={styles.desktopNav}>
-            <Link to="/gallery">
-              <Button variant="text">Galerija</Button>
-            </Link>
             {isAuth ? (
               <>
                 <Link to="/usersblock">
@@ -96,6 +93,9 @@ export const Header = () => {
               </>
             ) : (
               <>
+                <Link to="/gallery">
+                  <Button variant="text">Galerija</Button>
+                </Link>
                 <Link to="/login">
                   <Button variant="outlined">Ieeja</Button>
                 </Link>
