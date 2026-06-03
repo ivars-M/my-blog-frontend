@@ -122,9 +122,7 @@ export const Header = () => {
                     <ListItem>
                       <Link to="/usersblock">Lietotāju saraksts</Link>
                     </ListItem>
-                    <ListItem>
-                      <Link to="/gallery">Galerija</Link>
-                    </ListItem>
+
                     <ListItem>
                       <Link to="/add-post">Izveidot rakstu</Link>
                     </ListItem>
@@ -137,6 +135,9 @@ export const Header = () => {
                   </>
                 ) : (
                   <>
+                    <ListItem>
+                      <Link to="/gallery">Galerija</Link>
+                    </ListItem>
                     <ListItem>
                       <Link to="/login">Ieeja</Link>
                     </ListItem>
