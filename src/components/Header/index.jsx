@@ -79,14 +79,15 @@ export const Header = () => {
                 <Link to="/gallery">
                   <Button variant="text">Galerija</Button>
                 </Link>
-                <Link to="/add-post">
-                  <Button variant="contained">Izveidot rakstu</Button>
-                </Link>
                 {user ? (
                   <UserMenu user={user} onLogout={handleLogout} />
                 ) : (
                   <Skeleton variant="circular" width={40} height={40} />
                 )}
+                <Link to="/add-post">
+                  <Button variant="contained">Izveidot rakstu</Button>
+                </Link>
+
                 <Button onClick={handleLogout} color="error" variant="outlined">
                   Iziet
                 </Button>
