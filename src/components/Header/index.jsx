@@ -138,9 +138,9 @@ export const Header = () => {
                   </>
                 ) : (
                   <>
-                    <ListItem>
+                    {/* <ListItem>
                       <Link to="/gallery">Galerija</Link>
-                    </ListItem>
+                    </ListItem> */}
                     <ListItem>
                       <Link to="/login">Ieeja</Link>
                     </ListItem>
