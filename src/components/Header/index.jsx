@@ -119,9 +119,9 @@ export const Header = () => {
               <List>
                 {isAuth ? (
                   <>
-                    <Link to="/gallery">
-                      <Button variant="text">Galerija</Button>
-                    </Link>
+                    <ListItem>
+                      <Link to="/gallery">Galerija</Link>
+                    </ListItem>
                     <ListItem>
                       <Link to="/usersblock">Lietotāju saraksts</Link>
                     </ListItem>
